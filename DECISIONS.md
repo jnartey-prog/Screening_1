@@ -35,3 +35,8 @@
 - Decision: Add non-coder UX API (`read`, `screen`, `ScreeningSession`), abstract interfaces, template script, and reproducibility replay tooling.
 - Outcome: Section 12 checklist improved to 25 PASS / 5 FAIL / 1 N/A (`VALIDATION_REPORT.md`).
 - Remaining blockers are external constraints: preregistration upload confirmation and git-repository-dependent release/automation checks.
+
+## 2026-03-11 - Repository and Release Step Completion (R1)
+- Decision: Initialize git repo, stage files, run `pre-commit --all-files`, create local release commit and tag `v0.1.0`.
+- Outcome: Checklist advanced to 27 PASS / 3 FAIL / 1 N/A.
+- Remaining external blockers: preregistration registry upload, remote CI confirmation, and remote tag push.

@@ -68,13 +68,13 @@ Scope: Final checklist after UX/OO and reproducibility hardening
 25. [FAIL] `preregistration.json` generated, but external registry upload confirmation is pending.
 
 ## 12.9 CI/CD and Operations
-26. [FAIL] CI workflow includes lint/tests/build/security/perf steps, but "passes on clean branch" cannot be fully verified from this local non-git environment.
+26. [FAIL] CI workflow includes lint/tests/build/security/perf steps, but full clean-branch multi-OS/multi-version pass cannot be confirmed without remote CI runs.
 27. [PASS] No unresolved agent-boundary violations identified in this run.
-28. [FAIL] `.pre-commit-config.yaml` exists, but `pre-commit run --all-files` cannot be executed fully because this workspace is not a git repository.
+28. [PASS] `.pre-commit-config.yaml` exists and `pre-commit run --all-files` passes.
 
 ## 12.10 Release
-29. [FAIL] Versioning is internally consistent, but git-tag consistency cannot be verified without repository/tag state.
-30. [FAIL] Release tag/push cannot be performed because this workspace is not a git repository.
+29. [PASS] Versioning is consistent across `pyproject.toml`, `__init__.__version__`, `CHANGELOG.md`, and git tag `v0.1.0`.
+30. [FAIL] Release tag is created locally (`v0.1.0`), but remote push is pending (no configured remote).
 31. [N/A] Optional PyPI publication was not requested in this run.
 
 ## Evidence Commands Run
@@ -96,9 +96,9 @@ Scope: Final checklist after UX/OO and reproducibility hardening
 - `uv run --python test_venv\Scripts\python.exe --with ipython ipython -c "import resonance_risk_screening as mt; help(mt)"`
 
 ## Summary
-- PASS: 25
-- FAIL: 5
+- PASS: 27
+- FAIL: 3
 - N/A: 1
 
-Overall status: **Strongly advanced and near-complete against Section 12.**
-Remaining blockers are external/repository-governance steps plus preregistration publication confirmation.
+Overall status: **Near-complete against Section 12.**
+Remaining blockers are external: preregistration publication confirmation, remote CI confirmation, and remote tag push.
