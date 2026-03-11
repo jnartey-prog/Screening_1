@@ -1,0 +1,123 @@
+version: 1
+project: resonance-risk-screening
+seeds:
+  - task_id: TSK-M01
+    methodology_step: M01
+    title: Define study design and analytical workflow specification
+    assigned_to: R3
+    validation_hook: docs_check:specs/A1.md#methodological-framework
+  - task_id: TSK-M02
+    methodology_step: M02
+    title: Build study-system data dictionary and variable contracts
+    assigned_to: R3
+    validation_hook: schema_check:data_dictionary_complete
+  - task_id: TSK-M03
+    methodology_step: M03
+    title: Implement timestamp harmonization across channels
+    assigned_to: R4
+    validation_hook: test:test_timestamp_alignment
+  - task_id: TSK-M04
+    methodology_step: M04
+    title: Implement missing-data treatment policy with fallback paths
+    assigned_to: R4
+    validation_hook: test:test_missing_data_policy
+  - task_id: TSK-M05
+    methodology_step: M05
+    title: Implement MAD outlier screening and consistency checks
+    assigned_to: R4
+    validation_hook: test:test_mad_outlier_screening
+  - task_id: TSK-M06
+    methodology_step: M06
+    title: Implement per-unit normalization using equipment ratings
+    assigned_to: R4
+    validation_hook: test:test_per_unit_normalization
+  - task_id: TSK-M07
+    methodology_step: M07
+    title: Compute busbar voltage depression proxy
+    assigned_to: R4
+    validation_hook: test:test_voltage_depression_proxy
+  - task_id: TSK-M08
+    methodology_step: M08
+    title: Compute busbar voltage imbalance proxy
+    assigned_to: R4
+    validation_hook: test:test_voltage_imbalance_proxy
+  - task_id: TSK-M09
+    methodology_step: M09
+    title: Compute incomer utilization and concentration proxies
+    assigned_to: R4
+    validation_hook: test:test_incomer_utilization_concentration
+  - task_id: TSK-M10
+    methodology_step: M10
+    title: Compute feeder utilization, coincidence, and imbalance proxies
+    assigned_to: R4
+    validation_hook: test:test_feeder_proxy_suite
+  - task_id: TSK-M11
+    methodology_step: M11
+    title: Compute load-ramp and feeder-ramp-dispersion proxies
+    assigned_to: R4
+    validation_hook: test:test_dynamic_proxy_suite
+  - task_id: TSK-M12
+    methodology_step: M12
+    title: Compute stiffness proxy K(t) with numerical safeguards
+    assigned_to: R4
+    validation_hook: test:test_stiffness_proxy_stability
+  - task_id: TSK-M13
+    methodology_step: M13
+    title: Standardize feature space for clustering and modeling
+    assigned_to: R4
+    validation_hook: test:test_feature_standardization_no_leakage
+  - task_id: TSK-M14
+    methodology_step: M14
+    title: Implement PAM clustering and cluster-count tuning
+    assigned_to: R4
+    validation_hook: test:test_pam_cluster_selection
+  - task_id: TSK-M15
+    methodology_step: M15
+    title: Extract and annotate representative medoid states
+    assigned_to: R3
+    validation_hook: test:test_medoid_extraction_interpretability
+  - task_id: TSK-M16
+    methodology_step: M16
+    title: Implement reduced-order susceptibility score R(t)
+    assigned_to: R4
+    validation_hook: test:test_reduced_order_score_definition
+  - task_id: TSK-M17
+    methodology_step: M17
+    title: Define ordinal risk labels and engineering thresholds
+    assigned_to: R3
+    validation_hook: review:risk_label_threshold_approval
+  - task_id: TSK-M18
+    methodology_step: M18
+    title: Fit cumulative-logit ordinal model with interpretable outputs
+    assigned_to: R4
+    validation_hook: test:test_ordinal_model_fit
+  - task_id: TSK-M19
+    methodology_step: M19
+    title: Implement baseline benchmark screening methods
+    assigned_to: R4
+    validation_hook: test:test_benchmark_models
+  - task_id: TSK-M20
+    methodology_step: M20
+    title: Execute forward-chaining time-series cross-validation
+    assigned_to: R5
+    validation_hook: test:test_temporal_cv_no_leakage
+  - task_id: TSK-M21
+    methodology_step: M21
+    title: Perform sensitivity analysis on proxy contribution
+    assigned_to: R5
+    validation_hook: test:test_sensitivity_analysis_outputs
+  - task_id: TSK-M22
+    methodology_step: M22
+    title: Run uncertainty and robustness perturbation analysis
+    assigned_to: R5
+    validation_hook: test:test_robustness_under_perturbation
+  - task_id: TSK-M23
+    methodology_step: M23
+    title: Compare proposed model against baselines
+    assigned_to: R5
+    validation_hook: test:test_model_benchmark_comparison
+  - task_id: TSK-M24
+    methodology_step: M24
+    title: Generate manuscript artifacts and reproducibility bundle
+    assigned_to: R6
+    validation_hook: test:test_artifact_generation_manifest

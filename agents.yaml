@@ -1,0 +1,263 @@
+meta:
+  blueprint_version: "1.1"
+  project_name: "Physics-Guided Operational Stiffness Proxies for Reduced-Order Screening of Harmonic Resonance Risk in 33/11 kV Distribution Substations"
+  generated_at: "2026-03-11T13:10:00Z"
+  generated_by: "R1"
+
+team_composition:
+  active_roles:
+    - R1
+    - R2
+    - R3
+    - R4
+    - R5
+    - R6
+    - R7
+  excluded_roles: []
+
+agents:
+  R1:
+    name: "Orchestrator"
+    status: "active"
+    responsibilities:
+      - "Enforce blueprint phase order and invariants"
+      - "Coordinate handoffs across R2-R7"
+      - "Maintain DECISIONS.md"
+      - "Validate phase exit criteria"
+    tools:
+      - tool_id: "phase_controller"
+        description: "Advance or block phase transitions"
+        permissions: ["read", "write"]
+      - tool_id: "decision_logger"
+        description: "Append entries to DECISIONS.md"
+        permissions: ["write"]
+      - tool_id: "validation_runner"
+        description: "Run DoR and phase exit checks"
+        permissions: ["execute"]
+      - tool_id: "agent_coordinator"
+        description: "Assign work and validate boundary compliance"
+        permissions: ["read", "write"]
+    boundaries:
+      - "MUST NOT write implementation code"
+      - "MUST NOT bypass phase gates"
+      - "MUST delegate specs to R2/R3"
+    success_criteria:
+      - "All phases execute in order"
+      - "No unresolved invariant violations"
+      - "All major decisions logged"
+
+  R2:
+    name: "Architect"
+    status: "active"
+    responsibilities:
+      - "Author A1-A3 specifications"
+      - "Define public API signatures"
+      - "Map objectives to features"
+      - "Own architectural consistency"
+    tools:
+      - tool_id: "spec_generator"
+        description: "Create and edit A1-A3"
+        permissions: ["read", "write"]
+        target_files: ["specs/A1.md", "specs/A2.md", "specs/A3.md"]
+      - tool_id: "schema_validator"
+        description: "Validate spec structure and consistency"
+        permissions: ["execute"]
+      - tool_id: "dependency_resolver"
+        description: "Define dependency boundaries"
+        permissions: ["read", "execute"]
+      - tool_id: "api_designer"
+        description: "Design typed public interfaces"
+        permissions: ["read", "write"]
+    boundaries:
+      - "MUST NOT write src/ implementation"
+      - "MUST consult R3 for domain assumptions"
+      - "MUST NOT change A4/A5 unilaterally"
+    success_criteria:
+      - "A1-A3 complete with no placeholders"
+      - "Every objective maps to at least one A2 feature"
+      - "Public APIs are typed and documented"
+
+  R3:
+    name: "Domain Scientist"
+    status: "active"
+    responsibilities:
+      - "Validate scientific assumptions"
+      - "Ensure proxy and model definitions are physically grounded"
+      - "Define measurable acceptance criteria"
+      - "Validate dataset suitability"
+    tools:
+      - tool_id: "literature_fetcher"
+        description: "Resolve and inspect references"
+        permissions: ["read", "execute"]
+      - tool_id: "domain_validator"
+        description: "Validate method and metric choices"
+        permissions: ["read"]
+      - tool_id: "metric_checker"
+        description: "Check threshold and metric validity"
+        permissions: ["read", "execute"]
+      - tool_id: "provenance_linker"
+        description: "Link specs to literature provenance"
+        permissions: ["read", "write"]
+    boundaries:
+      - "MUST NOT write source implementation"
+      - "MUST NOT redefine package APIs directly"
+      - "MUST escalate architecture changes via R2"
+    success_criteria:
+      - "All objectives scientifically coherent"
+      - "Acceptance criteria are testable"
+      - "Dataset and risk rationale are explicit"
+
+  R4:
+    name: "Implementer"
+    status: "active"
+    responsibilities:
+      - "Implement src/ code aligned to A2/A3"
+      - "Create implementation-side test stubs"
+      - "Implement interactive pipeline entrypoints"
+      - "Maintain code quality constraints"
+    tools:
+      - tool_id: "code_generator"
+        description: "Create source files"
+        permissions: ["read", "write"]
+        target_dirs: ["src/"]
+      - tool_id: "file_writer"
+        description: "Modify package code files"
+        permissions: ["read", "write"]
+      - tool_id: "linter"
+        description: "Run lint checks"
+        permissions: ["execute"]
+      - tool_id: "formatter"
+        description: "Run formatting checks"
+        permissions: ["execute"]
+      - tool_id: "test_stub_creator"
+        description: "Create tests/ skeletons"
+        permissions: ["read", "write"]
+        target_dirs: ["tests/"]
+    boundaries:
+      - "MUST NOT modify A1-A5 specs"
+      - "MUST follow A2 signatures"
+      - "MUST request clarification for ambiguous specs"
+    success_criteria:
+      - "All A2 features implemented"
+      - "Pipeline entrypoint implemented"
+      - "Code quality checks pass"
+
+  R5:
+    name: "Tester"
+    status: "active"
+    responsibilities:
+      - "Execute tests and verify acceptance criteria"
+      - "Run coverage and leakage checks"
+      - "Validate temporal CV correctness"
+      - "Report failures with actionable diagnostics"
+    tools:
+      - tool_id: "test_runner"
+        description: "Run pytest suites"
+        permissions: ["execute"]
+      - tool_id: "coverage_analyzer"
+        description: "Measure and report coverage"
+        permissions: ["execute", "read"]
+      - tool_id: "fixture_generator"
+        description: "Generate fixtures"
+        permissions: ["read", "write"]
+        target_dirs: ["tests/fixtures/"]
+      - tool_id: "assertion_builder"
+        description: "Build acceptance assertions"
+        permissions: ["read", "write"]
+    boundaries:
+      - "MUST NOT modify src/ implementation"
+      - "MUST NOT silently change requirements"
+      - "MUST escalate spec conflicts to R2/R3"
+    success_criteria:
+      - "All expected tests executed"
+      - "Coverage thresholds met"
+      - "Objective acceptances verified"
+
+  R6:
+    name: "Documenter"
+    status: "active"
+    responsibilities:
+      - "Write user docs and examples"
+      - "Document pipeline usage"
+      - "Generate manuscript artifact instructions"
+      - "Keep docs aligned with APIs"
+    tools:
+      - tool_id: "doc_generator"
+        description: "Create docs files"
+        permissions: ["read", "write"]
+        target_dirs: ["docs/"]
+      - tool_id: "example_builder"
+        description: "Create runnable examples"
+        permissions: ["read", "write"]
+        target_dirs: ["examples/"]
+      - tool_id: "notebook_creator"
+        description: "Create notebooks"
+        permissions: ["read", "write"]
+      - tool_id: "ux_reviewer"
+        description: "Review usability and clarity"
+        permissions: ["read"]
+    boundaries:
+      - "MUST NOT modify algorithmic logic in src/"
+      - "MUST NOT diverge docs from implemented behavior"
+      - "MUST NOT alter spec acceptance definitions"
+    success_criteria:
+      - "Pipeline docs and examples are runnable"
+      - "Public APIs documented"
+      - "Manuscript artifact generation documented"
+
+  R7:
+    name: "RPM (Research Product Manager)"
+    status: "active"
+    responsibilities:
+      - "Maintain TRACEABILITY.csv"
+      - "Generate LITERATURE.bib"
+      - "Write REPRODUCIBILITY.md"
+      - "Maintain preregistration artifact"
+    tools:
+      - tool_id: "traceability_linker"
+        description: "Update traceability matrix"
+        permissions: ["read", "write"]
+        target_files: ["TRACEABILITY.csv"]
+      - tool_id: "bibtex_builder"
+        description: "Build bibliography from literature_context"
+        permissions: ["read", "write"]
+        target_files: ["LITERATURE.bib"]
+      - tool_id: "reproducibility_checker"
+        description: "Validate reproducibility instructions"
+        permissions: ["read", "execute"]
+      - tool_id: "preregistration_filler"
+        description: "Generate preregistration.json"
+        permissions: ["read", "write"]
+        target_files: ["preregistration.json"]
+    boundaries:
+      - "MUST NOT modify source code"
+      - "MUST NOT modify A1-A5 specs directly"
+      - "MUST keep governance artifacts synchronized"
+    success_criteria:
+      - "All objectives traced across specs, code, tests"
+      - "All key references prepared for BibTeX"
+      - "Reproducibility guide is complete"
+
+communication:
+  handoff_protocol:
+    description: "Structured handoff between role owners"
+    steps:
+      - "Requesting role logs handoff request in DECISIONS.md"
+      - "R1 verifies boundary/tool compatibility"
+      - "Target role receives scope, inputs, and acceptance"
+      - "Completion and review outcome are logged"
+
+  escalation_protocol:
+    description: "Blocker escalation with explicit ownership"
+    steps:
+      - "Agent logs blocker and impact in DECISIONS.md"
+      - "R1 assigns owner and resolution deadline"
+      - "Resolution rationale is captured in DECISIONS.md"
+
+  review_protocol:
+    description: "Cross-role review and acceptance"
+    steps:
+      - "Producer marks artifact ready"
+      - "Reviewer validates against success criteria"
+      - "Issues are logged and addressed"
+      - "Reviewer approves or requests another review round"

@@ -1,0 +1,19 @@
+version: "1.1"
+standard: "BLUEPRINT-Universal-1.1"
+active_roles:
+  - R1 # Orchestrator
+  - R2 # Architect
+  - R3 # Domain Scientist
+  - R4 # Implementer
+  - R5 # Tester
+  - R6 # Documenter
+  - R7 # Research Product Manager
+
+paths:
+  specs: "specs/"
+  src: "src/"
+  tests: "tests/"
+  docs: "docs/"
+  logs: ".blueprint/logs/"
+
+state_file: ".blueprint/state.json"

@@ -1,0 +1,105 @@
+version: 1
+tasks:
+  - task_id: A2.F-INGEST.001
+    title: Implement ingestion and preprocessing pipeline
+    assigned_to: R4
+    inputs: ["proposal.normalized.json", "specs/A2.md", "specs/A3.md", "specs/A4.md"]
+    constraints: "Must enforce timestamp alignment, missing-data policy, MAD outlier checks, and per-unit normalization."
+    expected_tests: ["TST-PROXY-002", "TST-PIPE-003"]
+    required_tools: ["code_generator", "file_writer", "test_stub_creator"]
+
+  - task_id: A2.F-PROXIES.001
+    title: Implement physics-guided proxy computations
+    assigned_to: R4
+    inputs: ["specs/A2.md", "specs/A3.md", "specs/A4.md"]
+    constraints: "Proxy formulas must follow methodological basis and log numeric safeguards."
+    expected_tests: ["TST-PROXY-001"]
+    required_tools: ["code_generator", "file_writer"]
+
+  - task_id: A2.F-CLUSTER.001
+    title: Implement PAM operating-state clustering and medoid extraction
+    assigned_to: R4
+    inputs: ["specs/A2.md", "specs/A3.md", "specs/A4.md"]
+    constraints: "Must include silhouette and gap-statistic support for k selection."
+    expected_tests: ["TST-CLUSTER-001", "TST-CLUSTER-002"]
+    required_tools: ["code_generator", "file_writer"]
+
+  - task_id: A2.F-RISK.001
+    title: Implement reduced-order resonance susceptibility score and labels
+    assigned_to: R4
+    inputs: ["specs/A2.md", "specs/A4.md"]
+    constraints: "Use R(t)=V_dep*U_inc*C_inc/K(t) and deterministic threshold mapping."
+    expected_tests: ["TST-RISK-001", "TST-RISK-002"]
+    required_tools: ["code_generator", "file_writer"]
+
+  - task_id: A2.F-MODEL.001
+    title: Implement ordinal risk model training and inference
+    assigned_to: R4
+    inputs: ["specs/A2.md", "specs/A4.md"]
+    constraints: "Cumulative-logit model must emit calibrated class probabilities."
+    expected_tests: ["TST-MODEL-001", "TST-MODEL-002"]
+    required_tools: ["code_generator", "file_writer"]
+
+  - task_id: A2.F-BENCH.001
+    title: Implement baseline benchmark screening methods
+    assigned_to: R4
+    inputs: ["specs/A2.md", "specs/A4.md"]
+    constraints: "Include voltage-threshold, load-threshold, and unweighted-proxy baselines."
+    expected_tests: ["TST-VAL-002"]
+    required_tools: ["code_generator", "file_writer"]
+
+  - task_id: A2.F-VALIDATE.001
+    title: Implement temporal CV and robustness analysis
+    assigned_to: R5
+    inputs: ["specs/A4.md", "specs/A5.md", "tasks.seed.yaml"]
+    constraints: "Must use leakage-safe temporal folds and perturbation-based robustness checks."
+    expected_tests: ["TST-VAL-001", "TST-VAL-003"]
+    required_tools: ["test_runner", "coverage_analyzer", "assertion_builder"]
+
+  - task_id: PIPELINE.CORE.001
+    title: Implement orchestrated ResonancePipeline class
+    assigned_to: R4
+    inputs: ["specs/A2.md", "specs/A3.md"]
+    constraints: "Pipeline must compose ingest, proxies, clustering, risk, model, and artifact steps."
+    expected_tests: ["TST-PIPE-001", "TST-PIPE-002"]
+    required_tools: ["code_generator", "file_writer"]
+
+  - task_id: PIPELINE.CLI.001
+    title: Implement interactive CLI wizard entrypoint
+    assigned_to: R4
+    inputs: ["specs/A2.md", "specs/A3.md", "specs/A4.md"]
+    constraints: "CLI must support guided prompts and non-coder defaults."
+    expected_tests: ["TST-PIPE-001", "TST-PIPE-003"]
+    required_tools: ["code_generator", "file_writer"]
+
+  - task_id: PIPELINE.E2E.001
+    title: Build end-to-end pipeline tests and fixtures
+    assigned_to: R5
+    inputs: ["specs/A4.md", "specs/A5.md"]
+    constraints: "Cover success path plus representative failure modes."
+    expected_tests: ["TST-PIPE-001", "TST-PIPE-002", "TST-PIPE-003"]
+    required_tools: ["fixture_generator", "assertion_builder", "test_runner"]
+
+  - task_id: ARTIFACTS.GEN.001
+    title: Implement manuscript tables and figures generation module
+    assigned_to: R4
+    inputs: ["proposal.normalized.json", "specs/A2.md", "specs/A4.md"]
+    constraints: "Must generate all required 7 tables and 7 figures with manifest metadata."
+    expected_tests: ["TST-ART-001", "TST-ART-002", "TST-ART-003"]
+    required_tools: ["code_generator", "file_writer"]
+
+  - task_id: DOCS.PIPELINE.001
+    title: Create user documentation and runnable examples
+    assigned_to: R6
+    inputs: ["specs/A1.md", "specs/A2.md", "specs/A3.md", "specs/A4.md"]
+    constraints: "Documentation must reflect actual API and include at least one pipeline walkthrough."
+    expected_tests: ["TST-PIPE-001"]
+    required_tools: ["doc_generator", "example_builder", "ux_reviewer"]
+
+  - task_id: GOV.TRACE.001
+    title: Build governance artifacts and literature bibliography
+    assigned_to: R7
+    inputs: ["proposal.normalized.json", "specs/A1.md", "specs/A2.md", "specs/A4.md"]
+    constraints: "All objectives must trace to specs/features/tests and references must be BibTeX-ready."
+    expected_tests: ["GOV-CHECK-001"]
+    required_tools: ["traceability_linker", "bibtex_builder", "preregistration_filler"]

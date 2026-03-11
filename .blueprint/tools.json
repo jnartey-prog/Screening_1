@@ -1,0 +1,29 @@
+{
+  "tools": [
+    {
+      "name": "read_file",
+      "description": "Reads the content of a file",
+      "abstract": true
+    },
+    {
+      "name": "write_file",
+      "description": "Writes content to a file",
+      "abstract": true
+    },
+    {
+      "name": "run_command",
+      "description": "Executes a shell command",
+      "abstract": true
+    },
+    {
+      "name": "list_files",
+      "description": "Lists files in a directory",
+      "abstract": true
+    },
+    {
+      "name": "search",
+      "description": "Searches code or files",
+      "abstract": true
+    }
+  ]
+}

@@ -1,0 +1,1163 @@
+Physics-Guided Operational Stiffness Proxies for Reduced-Order Screening of Harmonic Resonance Risk in 33/11 kV Distribution Substations
+1. Background
+
+Harmonic resonance in medium-voltage distribution networks arises from interactions between network inductance, shunt capacitance, and harmonic current sources associated with nonlinear loads and power electronic converters. When the network impedance exhibits resonance at frequencies close to dominant harmonic emissions, voltage distortion can be significantly amplified. Such amplification can increase equipment stress, accelerate insulation degradation, and undermine power quality compliance.
+
+In 33/11 kV distribution substations, resonance conditions are influenced by several factors including feeder loading patterns, capacitor bank operation, network configuration, and variations in system strength. Accurate identification of resonance-prone conditions is therefore an important aspect of power quality management in modern distribution networks.
+
+Traditional harmonic resonance analysis methods rely on frequency-domain impedance modelling, harmonic measurement campaigns, or electromagnetic transient simulations. While technically rigorous, these approaches require detailed network models and specialized monitoring infrastructure that are rarely available across large populations of distribution substations.
+
+Consequently, many utilities lack scalable analytical tools capable of identifying potential resonance vulnerability using only routinely available operational measurements.
+
+2. Knowledge Gap
+
+Despite extensive research on harmonic resonance analysis, three limitations remain evident in the literature:
+
+Model dependency
+
+Most resonance assessment methods require detailed network impedance models or harmonic injection data, which are rarely available in operational datasets.
+
+Monitoring dependency
+
+Many studies rely on waveform-level harmonic measurements, limiting their applicability to substations equipped with advanced power quality monitoring systems.
+
+Limited operational analytics
+
+Few studies explicitly investigate how routine operational variables such as voltage levels, feeder loading patterns, and load dynamics can be used to infer resonance susceptibility.
+
+As a result, a methodological gap exists between detailed harmonic resonance analysis and the practical need for scalable screening tools that can operate using routine substation data.
+
+3. Research Aim
+
+The aim of this research is to develop a physics-guided reduced-order screening framework capable of identifying harmonic resonance susceptibility in 33/11 kV distribution substations using routine operational measurements.
+
+The framework is designed to translate operational measurements into interpretable indicators that approximate electrical conditions associated with resonance amplification.
+
+4. Research Question
+
+How can routinely available operational measurements be transformed into physics-guided indicators capable of screening harmonic resonance susceptibility in 33/11 kV distribution substations under sparse monitoring conditions?
+
+5. Research Objectives
+
+To develop physics-guided proxy indicators that represent electrical conditions associated with resonance susceptibility in distribution substations.
+
+To reconstruct representative operating regimes of substations using clustering of operational proxy variables.
+
+To formulate a reduced-order resonance susceptibility model based on operational approximations of network stiffness and loading stress.
+
+To construct an interpretable probabilistic risk screening model capable of estimating resonance-prone operating conditions.
+
+To evaluate the robustness and practical applicability of the proposed framework through validation and sensitivity analysis.
+
+6. Conceptual Foundation
+
+The proposed framework is grounded in the physical observation that harmonic resonance amplification becomes more likely under conditions of reduced electrical stiffness and increased loading stress.
+
+Electrical stiffness in power systems is typically characterized by short-circuit strength or Thevenin impedance. However, such quantities are not directly observable in routine operational datasets.
+
+To address this limitation, this study introduces operational stiffness proxies derived from voltage–load sensitivity relationships.
+
+An operational stiffness approximation is defined as
+
+𝐾
+(
+𝑡
+)
+=
+∣
+Δ
+𝑃
+(
+𝑡
+)
+Δ
+𝑉
+(
+𝑡
+)
+∣
+K(t)=
+	​
+
+ΔV(t)
+ΔP(t)
+	​
+
+	​
+
+
+where 
+𝐾
+(
+𝑡
+)
+K(t) represents a data-driven proxy for network electrical stiffness. Lower stiffness values correspond to operating conditions where small power variations produce larger voltage responses, indicating weaker system support.
+
+In addition to stiffness conditions, resonance vulnerability is influenced by voltage margin, loading stress, and feeder loading concentration. These mechanisms are captured through physics-guided proxy indicators derived from operational data.
+
+7. Methodology
+
+The proposed framework consists of five analytical stages.
+
+7.1 Operational Data Reconstruction
+
+Routine substation operational data will be collected, including busbar voltages, transformer loading, feeder currents, and feeder power flows. Data preprocessing will include timestamp synchronization, outlier detection using median absolute deviation filtering, missing value interpolation, and normalization relative to equipment ratings.
+
+7.2 Physics-Guided Proxy Indicator Construction
+
+Operational measurements will be transformed into proxy indicators representing electrical conditions associated with resonance susceptibility.
+
+These indicators include:
+
+• voltage depression index
+• voltage imbalance index
+• incomer utilization ratio
+• feeder utilization ratio
+• feeder loading concentration index
+• load ramp rate
+• feeder ramp dispersion
+• operational network stiffness proxy
+
+These indicators collectively capture voltage margin conditions, loading stress, load concentration behaviour, dynamic operational changes, and electrical stiffness.
+
+7.3 Operating-State Reconstruction
+
+Substation operating conditions vary over time due to changes in demand patterns and network configuration.
+
+To capture these variations, proxy indicator datasets will be clustered using the Partitioning Around Medoids (PAM) algorithm. Cluster medoids represent typical substation operating regimes and enable regime-dependent analysis of resonance susceptibility.
+
+7.4 Reduced-Order Resonance Susceptibility Modelling
+
+A reduced-order resonance susceptibility function will be formulated using operational stiffness and loading indicators.
+
+A representative formulation is
+
+𝑅
+(
+𝑡
+)
+=
+𝑉
+𝑑
+𝑒
+𝑝
+(
+𝑡
+)
+⋅
+𝑈
+𝑖
+𝑛
+𝑐
+(
+𝑡
+)
+⋅
+𝐶
+𝑖
+𝑛
+𝑐
+(
+𝑡
+)
+𝐾
+(
+𝑡
+)
+R(t)=
+K(t)
+V
+dep
+	​
+
+(t)⋅U
+inc
+	​
+
+(t)⋅C
+inc
+	​
+
+(t)
+	​
+
+
+where
+
+• 
+𝑉
+𝑑
+𝑒
+𝑝
+V
+dep
+	​
+
+ represents voltage margin
+• 
+𝑈
+𝑖
+𝑛
+𝑐
+U
+inc
+	​
+
+ represents incomer loading stress
+• 
+𝐶
+𝑖
+𝑛
+𝑐
+C
+inc
+	​
+
+ represents feeder loading concentration
+• 
+𝐾
+(
+𝑡
+)
+K(t) represents operational stiffness
+
+This formulation reflects the physical principle that resonance amplification becomes more likely under conditions of reduced voltage margin, higher loading stress, greater feeder loading concentration, and weaker electrical stiffness.
+
+Susceptibility behaviour will be evaluated within reconstructed operating regimes to capture regime-dependent risk characteristics.
+
+7.5 Probabilistic Risk Screening
+
+A probabilistic screening model will be developed using cumulative logit ordinal regression.
+
+The model estimates the probability that a given operating condition belongs to ordered resonance risk categories such as low, moderate, or high risk. This approach preserves interpretability while enabling probabilistic characterization of resonance vulnerability.
+
+8. Validation and Robustness Analysis
+
+The framework will be evaluated through multiple validation procedures.
+
+Time-series cross-validation will assess model generalization across different operational periods. Sensitivity analysis will examine the influence of proxy indicators on risk predictions. Robustness tests will evaluate the stability of results under variations in clustering parameters and risk thresholds.
+
+Benchmark comparisons will be conducted against simpler screening methods based solely on voltage thresholds or loading conditions.
+
+9. Methodological Novelty
+
+The proposed framework introduces three methodological innovations:
+
+Operational stiffness proxies
+
+A data-driven approximation of network electrical stiffness derived from voltage–load sensitivity relationships.
+
+Reduced-order resonance susceptibility modelling
+
+A physically interpretable function linking operational proxies to resonance vulnerability without requiring harmonic measurements.
+
+State-conditioned resonance risk screening
+
+A regime-aware risk assessment framework that accounts for variations in substation operating conditions.
+
+10. Scientific Contributions
+
+This research contributes to power quality analysis in distribution networks by:
+
+• proposing a reduced-order methodology for screening harmonic resonance susceptibility using operational data
+• introducing physics-guided proxy indicators linking routine measurements to resonance-related electrical mechanisms
+• developing an operational stiffness approximation framework for resonance vulnerability assessment
+• integrating operating-state reconstruction with probabilistic risk modelling for practical substation analytics
+
+11. Practical Significance
+
+The proposed framework provides utilities with a scalable screening tool capable of identifying potentially vulnerable substations without requiring extensive harmonic monitoring infrastructure or detailed network impedance models. By enabling early identification of resonance-prone operating conditions, the approach supports targeted monitoring deployment, preventive mitigation strategies, and improved power quality management in distribution networks.
+
+
+
+
+Methodological Framework
+Physics-Guided Operational Stiffness Proxies for Reduced-Order Screening of Harmonic Resonance Risk in 33/11 kV Distribution Substations
+1. Research Design
+
+This study adopts a physics-guided computational research design to estimate harmonic resonance susceptibility in 33/11 kV distribution substations using routine operational measurements.
+
+Rather than directly measuring harmonic distortion, the proposed framework approximates resonance amplification conditions through operational proxies representing electrical characteristics associated with resonance vulnerability.
+
+The framework integrates physical reasoning with data-driven analysis to construct a reduced-order screening model capable of identifying operating conditions with elevated resonance susceptibility.
+
+The analytical pipeline consists of five stages:
+
+Operational data reconstruction → physics-guided proxy construction → operating regime reconstruction → reduced-order resonance susceptibility modelling → probabilistic risk screening
+
+2. Substation Operational Data Reconstruction
+2.1 Data Sources
+
+The analysis utilizes routine SCADA measurements from a 33/11 kV distribution substation. Typical operational variables include:
+
+• busbar voltage magnitude
+• incomer current
+• transformer loading
+• feeder currents
+• feeder real power flows
+
+These measurements are typically recorded at:
+
+• hourly resolution, or
+• 15-minute resolution.
+
+The observation horizon spans approximately 6–12 months to capture seasonal, weekly, and daily variations in substation operating conditions.
+
+2.2 Data Pre-Processing
+
+Operational datasets are prepared through the following steps.
+
+Timestamp Alignment
+
+All feeder and incomer measurements are synchronized to a common time index.
+
+Missing Value Treatment
+
+Missing values are handled using either
+
+• Kalman smoothing, or
+• seasonal interpolation.
+
+Outlier Detection
+
+Outliers are identified using a Median Absolute Deviation (MAD) filter.
+
+Per-Unit Normalisation
+
+Electrical variables are normalized relative to equipment ratings to allow comparison across feeders.
+
+3. Physics-Guided Proxy Indicator Construction
+
+Operational measurements are transformed into proxy indicators representing electrical conditions associated with resonance susceptibility.
+
+These proxies correspond to five physical mechanisms known to influence resonance amplification:
+
+• voltage margin
+• loading stress
+• feeder loading concentration
+• dynamic load behaviour
+• operational electrical stiffness
+
+3.1 Voltage Margin Indicators
+Voltage Depression Index
+𝑉
+𝑑
+𝑒
+𝑝
+(
+𝑡
+)
+=
+𝑉
+𝑛
+𝑜
+𝑚
+−
+𝑉
+𝑏
+𝑢
+𝑠
+(
+𝑡
+)
+𝑉
+𝑛
+𝑜
+𝑚
+V
+dep
+	​
+
+(t)=
+V
+nom
+	​
+
+V
+nom
+	​
+
+−V
+bus
+	​
+
+(t)
+	​
+
+
+Low voltage margin may indicate weaker network support and increased sensitivity to harmonic amplification.
+
+Voltage Imbalance Index
+𝑉
+𝑖
+𝑚
+𝑏
+(
+𝑡
+)
+=
+max
+⁡
+(
+𝑉
+𝑎
+,
+𝑉
+𝑏
+,
+𝑉
+𝑐
+)
+−
+min
+⁡
+(
+𝑉
+𝑎
+,
+𝑉
+𝑏
+,
+𝑉
+𝑐
+)
+𝑉
+𝑎
+𝑣
+𝑔
+V
+imb
+	​
+
+(t)=
+V
+avg
+	​
+
+max(V
+a
+	​
+
+,V
+b
+	​
+
+,V
+c
+	​
+
+)−min(V
+a
+	​
+
+,V
+b
+	​
+
+,V
+c
+	​
+
+)
+	​
+
+
+Phase imbalance may asymmetrically excite resonance conditions.
+
+3.2 Loading Stress Indicators
+Incomer Utilisation Ratio
+𝑈
+𝑖
+𝑛
+𝑐
+(
+𝑡
+)
+=
+𝐼
+𝑖
+𝑛
+𝑐
+(
+𝑡
+)
+𝐼
+𝑟
+𝑎
+𝑡
+𝑒
+𝑑
+U
+inc
+	​
+
+(t)=
+I
+rated
+	​
+
+I
+inc
+	​
+
+(t)
+	​
+
+
+Higher utilization reflects increased electrical loading stress.
+
+Feeder Utilisation Ratio
+𝑈
+𝑓
+,
+𝑖
+(
+𝑡
+)
+=
+𝐼
+𝑓
+,
+𝑖
+(
+𝑡
+)
+𝐼
+𝑟
+𝑎
+𝑡
+𝑒
+𝑑
+,
+𝑖
+U
+f,i
+	​
+
+(t)=
+I
+rated,i
+	​
+
+I
+f,i
+	​
+
+(t)
+	​
+
+
+This indicator captures feeder-level electrical stress.
+
+3.3 Loading Concentration Indicators
+Feeder Concentration Index
+𝐶
+𝑖
+𝑛
+𝑐
+(
+𝑡
+)
+=
+∑
+𝑖
+=
+1
+𝑁
+(
+𝐼
+𝑓
+,
+𝑖
+(
+𝑡
+)
+∑
+𝐼
+𝑓
+,
+𝑖
+(
+𝑡
+)
+)
+2
+C
+inc
+	​
+
+(t)=
+i=1
+∑
+N
+	​
+
+(
+∑I
+f,i
+	​
+
+(t)
+I
+f,i
+	​
+
+(t)
+	​
+
+)
+2
+
+High concentration indicates that a small number of feeders dominate system loading.
+
+Feeder Coincidence Index
+
+Synchronous loading behaviour across feeders is quantified using Pearson correlation.
+
+𝐶
+𝐼
+=
+mean
+(
+∣
+𝜌
+𝑖
+𝑗
+∣
+)
+CI=mean(∣ρ
+ij
+	​
+
+∣)
+3.4 Dynamic Indicators
+Load Ramp Rate
+𝑅
+(
+𝑡
+)
+=
+𝑃
+(
+𝑡
+)
+−
+𝑃
+(
+𝑡
+−
+1
+)
+Δ
+𝑡
+R(t)=
+Δt
+P(t)−P(t−1)
+	​
+
+
+Rapid load variation may indicate switching events or converter activity.
+
+Ramp Dispersion
+
+Measures heterogeneity of feeder load changes.
+
+3.5 Operational Electrical Stiffness Proxy
+
+Electrical stiffness is approximated using voltage–load sensitivity.
+
+𝐾
+(
+𝑡
+)
+=
+∣
+Δ
+𝑃
+(
+𝑡
+)
+Δ
+𝑉
+(
+𝑡
+)
+∣
+K(t)=
+	​
+
+ΔV(t)
+ΔP(t)
+	​
+
+	​
+
+
+Lower stiffness values indicate higher voltage sensitivity and weaker system support.
+
+4. Operating Regime Reconstruction
+
+Distribution substations operate under multiple regimes driven by load patterns and network configuration.
+
+Typical regimes include:
+
+• light load conditions
+• peak demand periods
+• uneven feeder loading
+• ramping regimes
+
+To capture regime-dependent behaviour, proxy indicator vectors are clustered using Partitioning Around Medoids (PAM).
+
+Clustering Procedure
+
+Standardize proxy indicators.
+
+Apply PAM clustering.
+
+Determine cluster number using
+
+• silhouette score
+• gap statistic.
+
+Extract cluster medoids representing characteristic operating regimes.
+
+Each medoid corresponds to a representative substation operating condition.
+
+5. Reduced-Order Resonance Susceptibility Modelling
+
+Because harmonic measurements and detailed network impedance models are unavailable, resonance vulnerability is approximated through a reduced-order analytical model derived from harmonic voltage amplification principles.
+
+5.1 Harmonic Amplification Basis
+
+The harmonic voltage relationship is
+
+𝑉
+ℎ
+=
+𝑍
+𝑒
+𝑞
+(
+𝑓
+)
+ 
+𝐼
+ℎ
+V
+h
+	​
+
+=Z
+eq
+	​
+
+(f)I
+h
+	​
+
+
+where
+
+• 
+𝑉
+ℎ
+V
+h
+	​
+
+ is harmonic voltage magnitude
+• 
+𝐼
+ℎ
+I
+h
+	​
+
+ is harmonic current injection
+• 
+𝑍
+𝑒
+𝑞
+(
+𝑓
+)
+Z
+eq
+	​
+
+(f) is the equivalent network impedance.
+
+Resonance amplification occurs when
+
+∣
+𝑍
+𝑒
+𝑞
+(
+𝑓
+)
+∣
+→
+maximum
+∣Z
+eq
+	​
+
+(f)∣→maximum
+
+Thus harmonic voltage distortion increases when network impedance increases.
+
+5.2 Operational Approximation of Impedance
+
+Electrical stiffness is inversely related to system impedance:
+
+𝐾
+∝
+1
+∣
+𝑍
+𝑒
+𝑞
+∣
+K∝
+∣Z
+eq
+	​
+
+∣
+1
+	​
+
+
+Therefore
+
+∣
+𝑍
+𝑒
+𝑞
+∣
+∝
+1
+𝐾
+∣Z
+eq
+	​
+
+∣∝
+K
+1
+	​
+
+
+Lower stiffness therefore corresponds to higher effective impedance.
+
+5.3 Proposition 1 — Reduced-Order Resonance Susceptibility Approximation
+
+Consider a distribution substation where harmonic voltage distortion is governed by
+
+𝑉
+ℎ
+=
+𝑍
+𝑒
+𝑞
+(
+𝑓
+)
+ 
+𝐼
+ℎ
+V
+h
+	​
+
+=Z
+eq
+	​
+
+(f)I
+h
+	​
+
+
+Let electrical stiffness 
+𝐾
+K be inversely related to network impedance, and assume that harmonic current injection scales with loading stress and feeder concentration.
+
+Then a reduced-order operational approximation of resonance susceptibility can be expressed as
+
+𝑅
+(
+𝑡
+)
+=
+𝑉
+𝑑
+𝑒
+𝑝
+(
+𝑡
+)
+ 
+𝑈
+𝑖
+𝑛
+𝑐
+(
+𝑡
+)
+ 
+𝐶
+𝑖
+𝑛
+𝑐
+(
+𝑡
+)
+𝐾
+(
+𝑡
+)
+R(t)=
+K(t)
+V
+dep
+	​
+
+(t)U
+inc
+	​
+
+(t)C
+inc
+	​
+
+(t)
+	​
+
+
+where
+
+• 
+𝑉
+𝑑
+𝑒
+𝑝
+V
+dep
+	​
+
+ represents voltage margin
+• 
+𝑈
+𝑖
+𝑛
+𝑐
+U
+inc
+	​
+
+ represents loading stress
+• 
+𝐶
+𝑖
+𝑛
+𝑐
+C
+inc
+	​
+
+ represents feeder loading concentration
+• 
+𝐾
+(
+𝑡
+)
+K(t) represents operational electrical stiffness.
+
+Under these assumptions, larger values of 
+𝑅
+(
+𝑡
+)
+R(t) correspond to operating conditions with increased susceptibility to harmonic resonance amplification.
+
+5.4 Regime-Conditioned Susceptibility
+
+Resonance susceptibility is evaluated within each reconstructed operating regime.
+
+𝑅
+𝑠
+𝑡
+𝑎
+𝑡
+𝑒
+=
+𝐸
+[
+𝑅
+(
+𝑡
+)
+∣
+𝑐
+𝑙
+𝑢
+𝑠
+𝑡
+𝑒
+𝑟
+𝑗
+]
+R
+state
+	​
+
+=E[R(t)∣cluster
+j
+	​
+
+]
+
+This captures regime-dependent resonance vulnerability.
+
+6. Probabilistic Resonance Risk Screening
+
+Resonance susceptibility values are converted into ordered risk levels:
+
+• Low risk
+• Moderate risk
+• High risk
+
+A probabilistic screening model is developed using cumulative logit ordinal regression.
+
+log
+⁡
+𝑃
+(
+𝑌
+≤
+𝑘
+)
+𝑃
+(
+𝑌
+>
+𝑘
+)
+=
+𝛼
+𝑘
+−
+𝛽
+1
+𝑉
+𝑑
+𝑒
+𝑝
+−
+𝛽
+2
+𝑈
+𝑖
+𝑛
+𝑐
+−
+𝛽
+3
+𝐶
+𝑖
+𝑛
+𝑐
+−
+𝛽
+4
+𝐾
+−
+1
+−
+𝛽
+5
+𝑅
+log
+P(Y>k)
+P(Y≤k)
+	​
+
+=α
+k
+	​
+
+−β
+1
+	​
+
+V
+dep
+	​
+
+−β
+2
+	​
+
+U
+inc
+	​
+
+−β
+3
+	​
+
+C
+inc
+	​
+
+−β
+4
+	​
+
+K
+−1
+−β
+5
+	​
+
+R
+
+Ordinal regression preserves the natural ordering of risk categories and provides interpretable coefficients.
+
+7. Model Validation
+
+The robustness of the framework is evaluated through three validation strategies.
+
+Robustness Analysis
+
+Risk thresholds are perturbed to examine classification stability.
+
+Time-Series Cross-Validation
+
+Temporal splits are used to evaluate model generalization.
+
+Sensitivity Analysis
+
+Leave-one-proxy-out tests evaluate indicator importance.
+
+8. Benchmark Comparison
+
+The proposed framework is compared with simpler screening approaches.
+
+Baseline 1
+
+Voltage threshold screening.
+
+Baseline 2
+
+Load-based screening.
+
+Baseline 3
+
+Unweighted proxy index.
+
+Final Method Statement
+
+This study proposes a physics-guided reduced-order framework for screening harmonic resonance susceptibility in 33/11 kV distribution substations using routine operational data. Operational measurements are transformed into proxy indicators representing voltage margin, loading stress, feeder concentration, dynamic behaviour, and electrical stiffness. Substation operating regimes are reconstructed using k-medoids clustering. A reduced-order resonance susceptibility model derived from harmonic amplification principles is then used to estimate vulnerability conditions. Finally, probabilistic resonance risk screening is performed using cumulative logit ordinal regression, with robustness analysis and benchmark comparisons used to evaluate the framework.

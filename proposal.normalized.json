@@ -1,0 +1,320 @@
+{
+  "Title": "Physics-Guided Operational Stiffness Proxies for Reduced-Order Screening of Harmonic Resonance Risk in 33/11 kV Distribution Substations",
+  "Scope": "In scope: develop and validate a physics-guided, reduced-order Python package that screens harmonic resonance susceptibility in 33/11 kV substations from routine operational measurements (busbar voltage, incomer current, feeder current, feeder power), reconstructs operating regimes, and outputs interpretable probabilistic risk classes with manuscript-ready artifacts. Out of scope: direct harmonic waveform measurement campaigns, full electromagnetic transient simulation, real-time closed-loop control deployment, and hardware-in-the-loop implementation.",
+  "Objectives": [
+    {
+      "statement": "Define and compute physics-guided proxy indicators that represent voltage margin, loading stress, feeder concentration, dynamics, and operational stiffness from routine substation data.",
+      "owner": "R3",
+      "acceptance": "ACC-OBJ-01",
+      "provenance": {
+        "doi": "https://doi.org/10.1109/access.2023.3238685"
+      }
+    },
+    {
+      "statement": "Reconstruct representative operating regimes using medoid-based clustering of standardized proxy vectors and identify characteristic regime medoids.",
+      "owner": "R3",
+      "acceptance": "ACC-OBJ-02",
+      "provenance": {
+        "doi": "https://doi.org/10.3390/en17225561"
+      }
+    },
+    {
+      "statement": "Formulate a reduced-order resonance susceptibility score grounded in harmonic amplification physics and operational stiffness approximation.",
+      "owner": "R3",
+      "acceptance": "ACC-OBJ-03",
+      "provenance": {
+        "doi": "https://doi.org/10.1109/ecce55643.2024.10860768"
+      }
+    },
+    {
+      "statement": "Train and evaluate an interpretable ordinal probabilistic screening model for low, moderate, and high resonance-risk classes.",
+      "owner": "R3",
+      "acceptance": "ACC-OBJ-04",
+      "provenance": {
+        "doi": "https://doi.org/10.1109/access.2025.3533702"
+      }
+    },
+    {
+      "statement": "Validate robustness and practical transferability through temporal cross-validation, sensitivity analysis, and benchmark comparisons.",
+      "owner": "R5",
+      "acceptance": "ACC-OBJ-05",
+      "provenance": {
+        "doi": "https://doi.org/10.1049/gtd2.70042"
+      }
+    }
+  ],
+  "Data to be used": [
+    {
+      "name": "Primary substation SCADA operational dataset (33/11 kV, hourly or 15-min resolution)",
+      "url": "https://data.open-power-system-data.org/time_series/",
+      "license": "Utility internal research-use authorization",
+      "pii_classification": "NONE",
+      "justification": "Core dataset required to compute operational proxies, reconstruct regimes, and estimate resonance susceptibility for the target substation context."
+    },
+    {
+      "name": "Open Power System Data - Time Series (benchmark and pipeline hardening)",
+      "url": "https://data.open-power-system-data.org/time_series/",
+      "license": "Open Data Commons Attribution License (ODC-BY-1.0)",
+      "pii_classification": "NONE",
+      "justification": "Used for workflow hardening, schema checks, and reproducibility tests when private utility exports are unavailable in CI."
+    }
+  ],
+  "Methodology & Analysis Plan": {
+    "steps": [
+      "M01 - Define study design and end-to-end analytical workflow for physics-guided resonance-risk screening.",
+      "M02 - Specify study system context and compile data dictionary for 33/11 kV substation variables.",
+      "M03 - Harmonize timestamps across monthly sheets and channels into one aligned time index.",
+      "M04 - Apply missing-data treatment (Kalman smoothing and seasonal interpolation policy with fallback rules).",
+      "M05 - Run outlier screening using MAD-based filters and consistency checks.",
+      "M06 - Normalize electrical variables to per-unit values using feeder/incomer ratings.",
+      "M07 - Compute busbar voltage depression index (V_dep).",
+      "M08 - Compute busbar voltage imbalance index (V_imb).",
+      "M09 - Compute incomer utilization and loading concentration indices.",
+      "M10 - Compute feeder utilization, feeder coincidence, and feeder imbalance indicators.",
+      "M11 - Compute load ramp-rate and feeder ramp-dispersion dynamic indicators.",
+      "M12 - Compute voltage-to-load sensitivity stiffness proxy K(t)=|dP/dV| with numerical safeguards.",
+      "M13 - Standardize proxy feature space for clustering and modeling.",
+      "M14 - Run PAM clustering and tune number of clusters using silhouette and gap-statistic criteria.",
+      "M15 - Extract and interpret representative operating-state medoids.",
+      "M16 - Construct reduced-order susceptibility score R(t)=V_dep*U_inc*C_inc/K(t).",
+      "M17 - Define engineering-grounded ordinal risk labels and threshold rules (low/medium/high).",
+      "M18 - Fit interpretable ordinal risk model (cumulative logit; constrained GAM as sensitivity alternative).",
+      "M19 - Implement baseline comparators (voltage-threshold, load-threshold, unweighted proxy index).",
+      "M20 - Execute time-series cross-validation with leakage-safe temporal folds.",
+      "M21 - Perform sensitivity analysis (leave-one-proxy-out and coefficient/effect stability checks).",
+      "M22 - Run uncertainty and robustness analysis under threshold and clustering perturbations.",
+      "M23 - Compare final model versus benchmarks on discrimination, calibration, and class-wise performance.",
+      "M24 - Generate manuscript-grade tables, figures, and reproducibility artifacts from the finalized pipeline."
+    ],
+    "mathematical_basis": "Harmonic amplification relation V_h = Z_eq(f)*I_h; operational approximation |Z_eq| proportional to 1/K where K is voltage-load sensitivity stiffness proxy; reduced-order susceptibility R(t)=V_dep(t)*U_inc(t)*C_inc(t)/K(t); regime-conditioned expectation R_state = E[R(t)|cluster_j]; ordinal cumulative-logit model for ordered risk categories.",
+    "manuscript_requirements": {
+      "tables": [
+        "Table 1. Summary of symbols, variables, units, and notation used in the study",
+        "Table 2. Description of the substation dataset, measurement channels, and data-quality flags",
+        "Table 3. Mathematical definitions and physical interpretation of the proposed proxy indicators",
+        "Table 4. Clustering inputs, parameter settings, and model-selection criteria",
+        "Table 5. Ordinal risk-labelling scheme and engineering thresholds for low-, medium-, and high-risk classes",
+        "Table 6. Performance comparison of the proposed model and benchmark screening methods",
+        "Table 7. Sensitivity, uncertainty, and robustness summary for proxy indicators and model outputs"
+      ],
+      "figures": [
+        "Figure 1. Overall conceptual framework for physics-guided harmonic resonance risk screening",
+        "Figure 2. Workflow for data preprocessing, proxy computation, clustering, and risk modelling",
+        "Figure 3. Time-series behavior of total load, busbar voltages, incomer currents, and selected feeder currents",
+        "Figure 4. Distribution and correlation structure of the proposed proxy indicators",
+        "Figure 5. Operating-state clustering results and representative medoid states",
+        "Figure 6. Ordinal risk model outputs, effect plots, or partial dependence of key proxy indicators",
+        "Figure 7. Benchmark comparison and uncertainty/sensitivity visualization for screened resonance-risk states"
+      ]
+    }
+  },
+  "Novelty flag": true,
+  "Preregistration URL": "https://osf.io/",
+  "literature_context": {
+    "provided_notes": "The literature notes indicate that MV (33/11 kV-class) substations are increasingly exposed to harmonic distortion, voltage profile stress, unbalance, and resonance-sensitive operating conditions under nonlinear loads and DER growth. Existing resonance approaches are often model-heavy (EMT/frequency-scan) or monitoring-heavy (waveform harmonics), limiting utility-scale deployment. The proposed study is positioned as an operational screening framework rather than direct harmonic measurement, emphasizing interpretable, physics-guided proxies (voltage margin, loading stress, concentration, dynamics, stiffness) that can be computed from routine SCADA measurements. Prior work supports using state-dependent analysis, robust validation, and practical recommendations constrained by data and modelling limits.",
+    "key_references": [
+      {
+        "doi": "https://doi.org/10.1109/access.2023.3238685",
+        "citation": "Razmi, D., et al. (2023). An Overview on Power Quality Issues and Control Strategies for Distribution Networks With the Presence of Distributed Generation Resources. IEEE Access.",
+        "relevance": "Background on modern PQ stressors in DER-rich distribution networks and harmonic management context."
+      },
+      {
+        "doi": "https://doi.org/10.1109/access.2025.3533702",
+        "citation": "Dehaghani, M., Korotko, T., & Rosin, A. (2025). AI Applications for Power Quality Issues in Distribution Systems: A Systematic Review. IEEE Access.",
+        "relevance": "Supports interpretable and data-driven risk analytics framing for operational screening."
+      },
+      {
+        "doi": "https://doi.org/10.1049/gtd2.70042",
+        "citation": "Ansari, H., et al. (2025). Harmonic Resonance Monitoring in Distribution Networks Considering Load Variation and Possible Network Configurations. IET GTD.",
+        "relevance": "Motivates load- and configuration-dependent resonance risk and monitoring strategies."
+      },
+      {
+        "doi": "https://doi.org/10.1049/gtd2.13218",
+        "citation": "Shakeri, S., et al. (2024). Optimal harmonic resonance monitoring in electrical network considering area of harmonic pollution and system uncertainty. IET GTD.",
+        "relevance": "Supports uncertainty-aware resonance monitoring and worst-case scenario considerations."
+      },
+      {
+        "doi": "https://doi.org/10.3390/en17225561",
+        "citation": "Lowczowski, K., et al. (2024). Analysis of the Impact of Volt/VAR Control on Harmonics Content and Alternative Harmonic Mitigation Methods. Energies.",
+        "relevance": "Evidence that operating conditions and compensation controls shift harmonic behavior and resonance risk."
+      },
+      {
+        "doi": "https://doi.org/10.1109/ecce55643.2024.10860768",
+        "citation": "Peerzada, A., et al. (2024). On the Impact of High-Order Harmonic Generation in Electrical Distribution Systems. IEEE ECCE.",
+        "relevance": "Physical motivation for resonance amplification consequences and high-order harmonic stress."
+      },
+      {
+        "doi": "https://doi.org/10.3390/app11020774",
+        "citation": "Abbas, A., et al. (2021). Optimal Harmonic Mitigation in Distribution Systems with Inverter Based Distributed Generation. Applied Sciences.",
+        "relevance": "Benchmark context for mitigation-oriented utility recommendations and comparator logic."
+      },
+      {
+        "doi": "https://doi.org/10.3390/en14123665",
+        "citation": "Michalec, L., et al. (2021). Impact of Harmonic Currents of Nonlinear Loads on Power Quality. Energies.",
+        "relevance": "Supports nonlinear-load-induced distortion mechanisms and practical PQ impacts."
+      },
+      {
+        "doi": "https://doi.org/10.3390/en17163998",
+        "citation": "Alawasa, K., & Al-Badi, A. (2024). Investigation and Analysis of the Power Quality in an Academic Institution's Electrical Distribution System. Energies.",
+        "relevance": "Operational evidence of PQ disturbance characteristics in distribution environments."
+      },
+      {
+        "doi": "https://doi.org/10.1088/1757-899x/1067/1/012124",
+        "citation": "Abood, S., & Abdul-Wahhab, T. (2021). Investigation of Harmonic Reduction Using Passive Filters in a Distribution Network in Basra City. IOP Conf. Series.",
+        "relevance": "Practical mitigation baseline and comparative context for reduced-order screening outputs."
+      },
+      {
+        "doi": "https://doi.org/10.3390/en14020494",
+        "citation": "Zapf, M., et al. (2021). Lifetime Assessment of PILC Cables... in MV networks under DER expansion. Energies.",
+        "relevance": "Connects evolving loading patterns to asset stress and operational risk significance."
+      },
+      {
+        "doi": "https://doi.org/10.1155/etep/3199158",
+        "citation": "Li, M., et al. (2025). Multiobjective Reactive Power Optimization Planning for Medium Voltage Distribution Networks. International Transactions on Electrical Energy Systems.",
+        "relevance": "Supports voltage/reactive margin interpretation embedded in proxy definitions."
+      }
+    ]
+  },
+  "Risks & mitigations": [
+    {
+      "risk": "Inconsistent timestamping and channel alignment across feeder and incomer records can bias proxy calculations.",
+      "owner": "R3",
+      "verification_method": "Run alignment diagnostics (max lag, missing overlap, duplicate index check) and require all channels to pass pre-processing QC thresholds before feature generation."
+    },
+    {
+      "risk": "Missing data and outlier contamination may destabilize stiffness and ramp proxies.",
+      "owner": "R5",
+      "verification_method": "Compare interpolation/outlier policies via ablation tests; accept only if key metrics remain within predefined robustness bands across policies."
+    },
+    {
+      "risk": "Proxy definitions may not faithfully represent true resonance mechanisms in all operating states.",
+      "owner": "R3",
+      "verification_method": "Evaluate physical consistency signs and monotonicity checks; review coefficient directions and medoid behavior with domain constraints."
+    },
+    {
+      "risk": "Cluster structure may be unstable with respect to feature scaling, k selection, and sampling window.",
+      "owner": "R5",
+      "verification_method": "Assess clustering stability using repeated bootstrap runs, silhouette/gap consistency, and adjusted Rand index across perturbations."
+    },
+    {
+      "risk": "Ordinal risk labels may be sensitive to threshold engineering assumptions.",
+      "owner": "R3",
+      "verification_method": "Perform threshold perturbation analysis and report label transition rates, calibration drift, and class-imbalance effects."
+    },
+    {
+      "risk": "Temporal leakage during model validation could inflate reported performance.",
+      "owner": "R5",
+      "verification_method": "Use strictly forward-chaining time-series splits and leakage audits for feature windows and scaler fitting."
+    },
+    {
+      "risk": "Limited transferability beyond the studied substation configuration.",
+      "owner": "R7",
+      "verification_method": "Run external-like validation on held-out seasonal windows and document portability assumptions in REPRODUCIBILITY.md."
+    },
+    {
+      "risk": "Private operational data governance may limit reproducibility in public CI.",
+      "owner": "R7",
+      "verification_method": "Maintain reproducible synthetic/open benchmark pipeline path and verify artifact generation parity with private-data path where permitted."
+    }
+  ],
+  "Python package specifics": {
+    "pypi_name": "resonance-risk-screening",
+    "import_name": "resonance_risk_screening",
+    "min_python_version": "3.10",
+    "max_python_version": "3.12",
+    "requires_python": ">=3.10,<3.13",
+    "dependencies": [
+      "numpy>=1.24",
+      "pandas>=2.0",
+      "scipy>=1.10",
+      "scikit-learn>=1.3",
+      "statsmodels>=0.14",
+      "matplotlib>=3.7",
+      "seaborn>=0.13",
+      "pyyaml>=6.0"
+    ],
+    "optional_dependencies": {
+      "dev": [
+        "pytest>=8.0",
+        "pytest-cov>=5.0",
+        "ruff>=0.5",
+        "mypy>=1.10",
+        "pre-commit>=3.7"
+      ],
+      "docs": [
+        "sphinx>=7.0",
+        "myst-parser>=3.0",
+        "furo>=2024.8.6"
+      ]
+    },
+    "console_scripts": [
+      "resonance-screen=resonance_risk_screening.cli:main",
+      "resonance-pipeline=resonance_risk_screening.pipeline:main"
+    ],
+    "python_typing": true,
+    "package_layout": "src",
+    "build_backend": "hatchling",
+    "package_manager": "uv",
+    "lock_file": "uv.lock",
+    "license": "MIT",
+    "classifiers": [
+      "Development Status :: 3 - Alpha",
+      "Intended Audience :: Science/Research",
+      "Topic :: Scientific/Engineering :: Information Analysis",
+      "Programming Language :: Python :: 3",
+      "Programming Language :: Python :: 3.10",
+      "Programming Language :: Python :: 3.11",
+      "Programming Language :: Python :: 3.12",
+      "License :: OSI Approved :: MIT License"
+    ]
+  },
+  "User experience & accessibility": {
+    "target_user_technical_level": "beginner-coder",
+    "non_coder_interface_required": true,
+    "preferred_interface_type": [
+      "cli-wizard",
+      "notebook"
+    ],
+    "use_case_complexity": "complex-multi-step",
+    "default_behavior": "Default pipeline auto-runs preprocessing, proxy computation, PAM state reconstruction, and ordinal risk scoring with conservative thresholds and generates manuscript artifacts to manuscript/artifacts/.",
+    "error_handling_approach": "user-friendly-messages"
+  },
+  "Observability & logging": {
+    "structured_logging_required": true,
+    "log_format": [
+      "jsonl",
+      "text"
+    ],
+    "log_storage_path": "logs/",
+    "run_log_schema": {
+      "required_fields": [
+        "run_id",
+        "timestamp",
+        "stage",
+        "status",
+        "duration_ms",
+        "dataset_name",
+        "input_hash",
+        "config_hash",
+        "error_code"
+      ],
+      "description": "Per-stage execution logs for each pipeline run."
+    },
+    "statistics_log_schema": {
+      "required_fields": [
+        "run_id",
+        "timestamp",
+        "split_id",
+        "metric_name",
+        "metric_value",
+        "confidence_interval",
+        "sample_size",
+        "class_distribution",
+        "sensitivity_scenario"
+      ],
+      "description": "Model performance and robustness statistics for reproducibility and audit."
+    },
+    "retention_policy": "Retain run logs for 180 days and statistics logs for 365 days; rotate files at 25 MB with gzip archival.",
+    "pii_redaction_rules": "No personal identifiers expected; redact free-text fields, file-system usernames, and any accidental meter/customer identifiers before persistence."
+  }
+}

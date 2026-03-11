@@ -1,0 +1,96 @@
+) Outline with word counts
+•	1. Introduction — [1100] words
+•	1.1 Background and problem context — [250] words
+•	1.2 Harmonic resonance risk in 33/11 kV substations — [220] words
+•	1.3 Practical monitoring limitations in data-constrained utilities — [180] words
+•	1.4 Research gap and motivation for proxy-based screening — [220] words
+•	1.5 Aim, objectives, and research questions — [150] words
+•	1.6 Contributions and paper organization — [80] words
+•	2. Literature Review and Theoretical Background — [1450] words
+•	2.1 Harmonic resonance mechanisms in medium-voltage distribution systems — [220] words
+•	2.2 Conventional harmonic assessment and resonance studies — [220] words
+•	2.3 Limitations of direct harmonic monitoring for operational screening — [170] words
+•	2.4 Proxy-based power-quality assessment: current state of knowledge — [180] words
+•	2.5 Physics-guided modelling and interpretable risk analytics in power systems — [220] words
+•	2.6 Operational-state characterization in substations — [170] words
+•	2.7 Knowledge gap synthesis and conceptual positioning of the study — [180] words
+•	2.8 Theoretical basis for physics-guided proxy indicators — [90] words
+•	3. Materials and Methods — [2450] words
+•	3.1 Study design and methodological framework — [180] words
+•	3.2 Study system and dataset description — [300] words
+•	3.2.1 Description of the 33/11 kV substation environment — [120] words
+•	3.2.2 Operational variables and data structure — [100] words
+•	3.2.3 Data scope, coverage, and quality constraints — [80] words
+•	3.3 Data preprocessing and quality control — [280] words
+•	3.3.1 Timestamp harmonization and monthly-sheet consolidation — [90] words
+•	3.3.2 Missing data handling and exclusion logic — [90] words
+•	3.3.3 Outlier screening and consistency checks — [100] words
+•	3.4 Physics-guided proxy indicator formulation — [620] words
+•	3.4.1 Busbar voltage depression index — [80] words
+•	3.4.2 Busbar voltage imbalance index — [70] words
+•	3.4.3 Incomer utilization and concentration indices — [110] words
+•	3.4.4 Feeder utilization, coincidence, and imbalance indices — [150] words
+•	3.4.5 Load ramp and feeder ramp dispersion indices — [110] words
+•	3.4.6 Voltage-to-load sensitivity proxy — [100] words
+•	3.5 Operating-state reconstruction and clustering — [320] words
+•	3.5.1 Feature standardization and state-space definition — [90] words
+•	3.5.2 Selection of clustering algorithm and number of clusters — [120] words
+•	3.5.3 Interpretation of representative operating-state medoids — [110] words
+•	3.6 Reduced-order resonance susceptibility modelling and risk labelling — [320] words
+•	3.6.1 3.6.1 Physical basis of the reduced-order resonance susceptibility model — [110] words
+•	3.6.2 Engineering-grounded construction of ordinal risk labels — [110] words
+•	3.6.3 Engineering assumptions and threshold selection — [100] words
+•	3.7 Ordinal risk modelling and benchmark methods — [260] words
+•	3.7.1 Ordinal regression or constrained generalized additive formulation — [130] words
+•	3.7.2 Baseline threshold and non-physics screening comparators — [130] words
+•	3.8 Uncertainty quantification, sensitivity analysis, and validation metrics — [170] words
+•	4. Results — [1700] words
+•	4.1 Dataset characteristics and operational-state distribution — [220] words
+•	4.2 Descriptive behavior of voltage, load, incomer, and feeder variables — [220] words
+•	4.3 Behavior of physics-guided proxy indicators across operating windows — [260] words
+•	4.4 Clustered operating states and representative medoids — [230] words
+•	4.5 Reduced-order risk labels and screened high-risk operating conditions — [230] words
+•	4.6 Performance of the ordinal risk model — [220] words
+•	4.7 Comparison with benchmark screening methods — [180] words
+•	4.8 Sensitivity, uncertainty, and robustness results — [140] words
+•	5. Discussion — [1000] words
+•	5.1 Interpretation of key findings in relation to resonance theory — [240] words
+•	5.2 Significance of proxy indicators for utility practice — [190] words
+•	5.3 Methodological contribution relative to existing literature — [200] words
+•	5.4 Transferability to similar 33/11 kV substations — [150] words
+•	5.5 Limitations of the reduced-order screening framework — [120] words
+•	5.6 Implications for future harmonic monitoring and modelling research — [100] words
+•	6. Conclusion — [300] words
+•	6.1 Summary of study objectives and findings — [120] words
+•	6.2 Main methodological and practical contributions — [100] words
+•	6.3 Concluding recommendations — [80] words
+Total estimated word count — [8000] words
+D) Tables and figures (7 tables and 7 figures)
+Tables
+1.	Table 1. Summary of symbols, variables, units, and notation used in the study
+2.	Table 2. Description of the substation dataset, measurement channels, and data-quality flags
+3.	Table 3. Mathematical definitions and physical interpretation of the proposed proxy indicators
+4.	Table 4. Clustering inputs, parameter settings, and model-selection criteria
+5.	Table 5. Ordinal risk-labelling scheme and engineering thresholds for low-, medium-, and high-risk classes
+6.	Table 6. Performance comparison of the proposed model and benchmark screening methods
+7.	Table 7. Sensitivity, uncertainty, and robustness summary for proxy indicators and model outputs
+Figures
+1.	Figure 1. Overall conceptual framework for physics-guided harmonic resonance risk screening
+2.	Figure 2. Workflow for data preprocessing, proxy computation, clustering, and risk modelling
+3.	Figure 3. Time-series behavior of total load, busbar voltages, incomer currents, and selected feeder currents
+4.	Figure 4. Distribution and correlation structure of the proposed proxy indicators
+5.	Figure 5. Operating-state clustering results and representative medoid states
+6.	Figure 6. Ordinal risk model outputs, effect plots, or partial dependence of key proxy indicators
+7.	Figure 7. Benchmark comparison and uncertainty/sensitivity visualization for screened resonance-risk states
+E) Notes (optional)
+•	Key assumptions
+•	The paper is framed as a harmonic resonance risk screening study, not a direct harmonic measurement study.
+•	A reduced-order physics-guided screening layer is assumed in place of full electromagnetic transient simulation.
+•	The available operational dataset is assumed to contain sufficiently reliable hourly records of busbar voltages, incomer currents, feeder currents, and total power for at least one meaningful study period.
+•	The target outlet is a Q1 power systems or power quality journal, where methodological clarity, reproducibility, and transferability are important.
+•	Any missing inputs needed for best results
+•	Final target journal name, since section length and style can be optimized to specific author guidelines.
+•	Exact operational data coverage after cleaning, especially valid months and missingness profile.
+•	Any feeder/incomer ratings needed to normalize utilization indices.
+•	Whether the reduced-order screening layer will be purely analytical, empirically calibrated, or informed by prior thesis simulations.
+•	Preferred statistical model choice: ordinal logistic regression, generalized additive model, or monotonic boosting.

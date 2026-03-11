@@ -1,0 +1,17 @@
+benchmarks: manuscript\artifacts\benchmark_metrics.csv
+cv_metrics: manuscript\artifacts\cv_metrics.csv
+figure_1: manuscript\artifacts\figure_1_framework.png
+figure_2: manuscript\artifacts\figure_2_workflow.png
+figure_3: manuscript\artifacts\figure_3_timeseries.png
+figure_4: manuscript\artifacts\figure_4_proxy_distribution.png
+figure_5: manuscript\artifacts\figure_5_clusters.png
+figure_6: manuscript\artifacts\figure_6_model_effects.png
+figure_7: manuscript\artifacts\figure_7_benchmark_uncertainty.png
+predictions: manuscript\artifacts\risk_predictions.csv
+table_1: manuscript\artifacts\table_1_symbols.csv
+table_2: manuscript\artifacts\table_2_dataset_channels.csv
+table_3: manuscript\artifacts\table_3_proxy_definitions.csv
+table_4: manuscript\artifacts\table_4_clustering_settings.csv
+table_5: manuscript\artifacts\table_5_risk_labels.csv
+table_6: manuscript\artifacts\table_6_benchmark_performance.csv
+table_7: manuscript\artifacts\table_7_robustness_summary.csv

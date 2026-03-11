@@ -1,0 +1,24 @@
+{
+  "title": "Physics-Guided Operational Stiffness Proxies for Reduced-Order Screening of Harmonic Resonance Risk in 33/11 kV Distribution Substations",
+  "status": "draft",
+  "registry": "OSF",
+  "registry_url": "https://osf.io/",
+  "research_question": "How can routinely available operational measurements be transformed into physics-guided indicators capable of screening harmonic resonance susceptibility in 33/11 kV distribution substations under sparse monitoring conditions?",
+  "objectives": [
+    "Compute physics-guided operational proxies.",
+    "Reconstruct operating regimes using medoid-based clustering.",
+    "Build reduced-order susceptibility score linked to resonance theory.",
+    "Train interpretable ordinal probabilistic risk model.",
+    "Validate robustness with temporal CV and benchmark methods."
+  ],
+  "analysis_plan": {
+    "clustering": "PAM-style medoid reconstruction",
+    "modeling": "Cumulative logit ordinal model",
+    "validation": [
+      "Time-series cross-validation",
+      "Sensitivity analysis",
+      "Benchmark comparison"
+    ]
+  }
+}
+

@@ -1,0 +1,7 @@
+objective_id,objective_statement,a2_features,a4_tests,task_ids,source_reference
+ACC-OBJ-01,"Compute physics-guided operational proxies","F-INGEST|F-PROXIES","TST-PROXY-001|TST-PROXY-002","A2.F-INGEST.001|A2.F-PROXIES.001","https://doi.org/10.1109/access.2023.3238685"
+ACC-OBJ-02,"Reconstruct operating regimes via medoid clustering","F-CLUSTER","TST-CLUSTER-001|TST-CLUSTER-002","A2.F-CLUSTER.001","https://doi.org/10.3390/en17225561"
+ACC-OBJ-03,"Implement reduced-order susceptibility score","F-RISK","TST-RISK-001|TST-RISK-002","A2.F-RISK.001","https://doi.org/10.1109/ecce55643.2024.10860768"
+ACC-OBJ-04,"Train interpretable ordinal risk model","F-MODEL","TST-MODEL-001|TST-MODEL-002","A2.F-MODEL.001","https://doi.org/10.1109/access.2025.3533702"
+ACC-OBJ-05,"Validate robustness and benchmark performance","F-BENCH|F-VALIDATE|F-ARTIFACT","TST-VAL-001|TST-VAL-002|TST-VAL-003|TST-ART-001|TST-ART-002|TST-ART-003","A2.F-BENCH.001|A2.F-VALIDATE.001|ARTIFACTS.GEN.001","https://doi.org/10.1049/gtd2.70042"
+

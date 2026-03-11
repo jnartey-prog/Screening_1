@@ -1,0 +1,45 @@
+{
+  "project_name": "Analytical Framework for Supraharmonic Aggregation Under Spatial Uncertainty Using Point Process Theory",
+  "current_phase": "PHASE_6_COMPLETE",
+  "active_task": "NONE",
+  "completed_milestones": [
+    "PHASE_-1_PROPOSAL_STANDARDIZED",
+    "PHASE_0_PROPOSAL_VALIDATED",
+    "PHASE_1A_AGENTS_ESTABLISHED",
+    "PHASE_1B_SPECS_GENERATED",
+    "PHASE_2_TASK_GRAPH_BUILT",
+    "PHASE_3_IMPLEMENTATION_COMPLETE",
+    "PHASE_4_PIPELINE_INTEGRATED",
+    "PHASE_5_GOVERNANCE_ARTIFACTS_COMPLETE",
+    "PHASE_6_RUNTIME_SMOKE_VALIDATED",
+    "PHASE_6_PYTEST_GATE_PASSED"
+  ],
+  "active_agent": "R1",
+  "artifacts": {
+    "proposal": "proposal.normalized.json",
+    "agents": "agents.yaml",
+    "tasks_seed": "tasks.seed.yaml",
+    "tasks_graph": "tasks.yaml",
+    "validation_report": "validation-report.md",
+    "final_validation_report": "VALIDATION_REPORT.md",
+    "decisions": "DECISIONS.md",
+    "specs": [
+      "specs/A1.md",
+      "specs/A2.md",
+      "specs/A3.md",
+      "specs/A4.md",
+      "specs/A5.md",
+      "specs/A6.md"
+    ],
+    "code": [
+      "src/supraharmonic_aggregation/"
+    ],
+    "governance": [
+      "TRACEABILITY.csv",
+      "LITERATURE.bib",
+      "REPRODUCIBILITY.md",
+      "preregistration.json"
+    ]
+  },
+  "last_updated": "2026-02-19T15:27:00Z"
+}
