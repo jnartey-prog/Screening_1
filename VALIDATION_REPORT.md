@@ -68,13 +68,13 @@ Scope: Final checklist after UX/OO and reproducibility hardening
 25. [FAIL] `preregistration.json` generated, but external registry upload confirmation is pending.
 
 ## 12.9 CI/CD and Operations
-26. [FAIL] CI workflow includes lint/tests/build/security/perf steps, but full clean-branch multi-OS/multi-version pass cannot be confirmed without remote CI runs.
+26. [FAIL] CI workflow includes lint/tests/build/security/perf steps, but full clean-branch multi-OS/multi-version pass cannot be confirmed without remote CI evidence attached in this workspace.
 27. [PASS] No unresolved agent-boundary violations identified in this run.
 28. [PASS] `.pre-commit-config.yaml` exists and `pre-commit run --all-files` passes.
 
 ## 12.10 Release
 29. [PASS] Versioning is consistent across `pyproject.toml`, `__init__.__version__`, `CHANGELOG.md`, and git tag `v0.1.0`.
-30. [FAIL] Release tag is created locally (`v0.1.0`), but remote push is pending (no configured remote).
+30. [PASS] Release tag and branch are pushed to remote (`origin`: `master`, tag `v0.1.0`).
 31. [N/A] Optional PyPI publication was not requested in this run.
 
 ## Evidence Commands Run
@@ -88,6 +88,9 @@ Scope: Final checklist after UX/OO and reproducibility hardening
 - `uv build`
 - `uvx twine check dist/*`
 - `uv run resonance-pipeline --input data/substation_scada_33_11kv.csv --output-dir manuscript/artifacts`
+- `.\.venv\Scripts\python.exe scripts/ingest_mallam_field_data.py --output data\substation_scada_33_11kv_field.csv --provenance manuscript\artifacts\research\data_provenance.yaml`
+- `.\.venv\Scripts\python.exe manuscript/generate_research_artifacts.py --data-path data\substation_scada_33_11kv_field.csv`
+- `.\.venv\Scripts\python.exe -c "from pathlib import Path; import sys; sys.path.insert(0,'src'); from resonance_risk_screening.pipeline import ResonancePipeline; ResonancePipeline().run(Path('data/substation_scada_33_11kv_field.csv'), Path('manuscript/artifacts'))"`
 - `uv run python scripts/reproduce_all.py`
 - `uv run python scripts/perf_smoke.py`
 - `uvx pip-audit`
@@ -95,10 +98,20 @@ Scope: Final checklist after UX/OO and reproducibility hardening
 - `test_venv\Scripts\python.exe -c "import resonance_risk_screening as r; print(r.__version__)"`
 - `uv run --python test_venv\Scripts\python.exe --with ipython ipython -c "import resonance_risk_screening as mt; help(mt)"`
 
+## Field-Data Run Evidence
+- Source workbook: `MALLAM BSP HOURLY READINGS, 2024.xlsx`
+- Ingest path: `scripts/ingest_mallam_field_data.py`
+- Provenance report: `manuscript/artifacts/research/data_provenance.yaml`
+- Field dataset used for latest artifacts: `data/substation_scada_33_11kv_field.csv`
+- Pipeline outputs updated from field data:
+  - `manuscript/artifacts/risk_predictions.csv` (2069 rows)
+  - `manuscript/artifacts/cv_metrics.csv` (mean accuracy: 0.6852; mean macro_f1: 0.6119)
+  - `manuscript/artifacts/benchmark_metrics.csv`
+
 ## Summary
-- PASS: 27
-- FAIL: 3
+- PASS: 28
+- FAIL: 2
 - N/A: 1
 
 Overall status: **Near-complete against Section 12.**
-Remaining blockers are external: preregistration publication confirmation, remote CI confirmation, and remote tag push.
+Remaining blockers are external: preregistration publication confirmation and remote CI confirmation.
