@@ -288,7 +288,7 @@ Operational data reconstruction → physics-guided proxy construction → operat
 2. Substation Operational Data Reconstruction
 2.1 Data Sources
 
-The analysis utilizes a field workbook titled `data_table.xlsx`, from which a deterministic ingest script reconstructs an analysis-ready hourly dataset for a named 33/11 kV site identified in the workbook as the restricted operational site. The retained monitoring window used in the present study is exactly 2024-01-01 00:00:00 to 2024-04-01 07:00:00, yielding 2069 valid hourly observations after timestamp harmonization, channel completeness checks, and duplicate removal. The retained rows are drawn from the JAN, FEB, MAR, and APR workbook sheets.
+The analysis utilizes a restricted operational workbook, from which a deterministic ingest script reconstructs an analysis-ready hourly dataset for a 33/11 kV site. The retained monitoring window used in the present study is exactly 2024-01-01 00:00:00 to 2024-04-01 07:00:00, yielding 2082 valid hourly observations after timestamp harmonization, channel completeness checks, and duplicate removal. The retained rows are drawn from the `Sheet2` worksheet.
 
 The source workbook exposes the following operational channels and engineering units:
 

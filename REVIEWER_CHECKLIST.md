@@ -2,9 +2,9 @@
 
 ## Data Lineage
 
-- [x] Raw source workbook identified: `data_table.xlsx`
+- [x] Raw source workbook identified: `data/data_table.xlsx`
 - [x] Deterministic ingest script provided: `scripts/ingest_operational_workbook.py`
-- [x] Analysis dataset specified: `data/substation_scada_33_11kv_field.csv`
+- [x] Analysis dataset specified: `data/substation_scada_33_11kv.csv`
 - [x] Provenance summary included: `manuscript/artifacts/research/data_provenance.yaml`
 - [x] Frozen run manifest included: `FINAL_RUN_MANIFEST.yaml`
 - [x] Artifact hashes recorded: `manuscript/artifacts/research/ARTIFACT_HASHES.sha256`

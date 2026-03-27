@@ -4,18 +4,17 @@
 
 This appendix documents the exact data transformation path used for the current manuscript artifacts:
 
-- Raw source: `data_table.xlsx`
+- Raw source: `data/data_table.xlsx`
 - Ingest script: `scripts/ingest_operational_workbook.py`
-- Analysis dataset: `data/substation_scada_33_11kv_field.csv`
+- Analysis dataset: `data/substation_scada_33_11kv.csv`
 - Provenance summary: `manuscript/artifacts/research/data_provenance.yaml`
 
-The source workbook identifies the monitored site as `the restricted operational site` and organises hourly records by monthly sheets. The retained analysis window in the current frozen run is:
+The source workbook is treated in this repository as a restricted operational record. The retained analysis window in the current frozen run is:
 
 - Start timestamp: `2024-01-01 00:00:00`
 - End timestamp: `2024-04-01 07:00:00`
-- Valid retained rows: `2069`
-- Contributing sheets: `JAN`, `FEB`, `MAR`, `APR`
-- Continuous-window coverage relative to the start/end bounds: `2069 / 2192 = 94.39%`
+- Valid retained rows: `2082`
+- Contributing sheets: `Sheet2`
 
 This replaces any earlier vague phrasing such as "approximately one year." The current manuscript artifacts are based on the exact window above.
 
@@ -23,12 +22,13 @@ This replaces any earlier vague phrasing such as "approximately one year." The c
 
 The workbook header rows expose the following source channels and units:
 
-- Incomer 1-4 current: `C:F`, unit `Amps`
-- Aggregate incomer current: `G`, label `TOTAL (KA)`, unit `kA`
-- Busbar voltage channels: `H:I`, labels `BB1 (KV)` and `BB2 (KV)`, unit `kV`
-- Incomer 1-4 real power: `K:N`, unit `MW`
-- Aggregate real power: `O`, label `TOTAL (MW)`, unit `MW`
-- Feeder current channels: `Q:AB`, presented as paired circuits for named 33 kV feeders including `AWOSHIE`, `KWASHIEMAN`, `SANTA MARIA`, `WEIJA`, `SAKAMAN`, and `GBAWE`
+- date and hour fields
+- incomer current channels
+- aggregate incomer current labeled `TOTAL (KA)` in the workbook
+- busbar voltage channel(s) in `kV`
+- incomer power channels in `MW`
+- aggregate real power in `MW`
+- feeder current channels
 
 Only the analysis channels required by the screening pipeline are retained in the final CSV:
 
@@ -43,24 +43,19 @@ Only the analysis channels required by the screening pipeline are retained in th
 ## Workbook Parsing Rules
 
 - The workbook is parsed from OOXML sheet XML (`xl/worksheets/sheet*.xml`).
-- Monthly tabs are discovered from `workbook.xml` relationship mapping.
+- Workbook tabs are discovered from `workbook.xml` relationship mapping.
 - Shared strings are resolved from `sharedStrings.xml`.
-- Daily blocks are identified from rows containing `DATE:` markers.
-- Date formats handled:
-  - `DATE: dd/mm/yyyy`
-  - `DATE: dd-mm-yyyy`
-  - variable whitespace around separators
-- If explicit date text is absent, Excel serial date in column `A` is used when present.
-- Hour index is read from column `B` and accepted only for `1..24`.
+- If explicit date text is absent, Excel serial date is used when present.
+- Hour index is accepted only for `1..24`.
 - Timestamp is set as `date + (hour - 1)`.
 
 ## Channel Mapping (Raw -> Analysis)
 
 - `timestamp` <- derived from date block + hourly index (`B`)
-- `i_inc` <- primary `G` (TOTAL current); fallback = sum of incomer currents (`C:D:E:F`) when needed
-- `v_bus` <- mean of available busbar voltages (`H`, `I`)
-- `p_total` <- primary `O` (TOTAL MW); fallback = sum of incomer MW (`K:L:M:N`)
-- `i_f_1`, `i_f_2`, `i_f_3` <- first three available feeder numeric channels in `Q..AB`
+- `i_inc` <- aggregate current field; fallback = sum of incomer-current channels when needed
+- `v_bus` <- mean of available busbar-voltage channels
+- `p_total` <- aggregate total-MW field; fallback = sum of incomer MW channels
+- `i_f_1`, `i_f_2`, `i_f_3` <- first three available feeder numeric channels
 
 The feeder-current reduction to `i_f_1:i_f_3` is a modelling choice made for a complete and consistent reduced-order dataset. The original workbook contains additional feeder channels beyond the three retained analysis features.
 
@@ -84,6 +79,7 @@ The feeder-current reduction to `i_f_1:i_f_3` is a modelling choice made for a c
 - start/end timestamp
 - sheets contributing retained rows
 - per-channel min/max/mean/missing-rate
+- screened-outlier counts
 
 ## Important Data-Coverage Note
 

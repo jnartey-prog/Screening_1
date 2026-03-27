@@ -88,7 +88,7 @@ Scope: Final checklist after UX/OO and reproducibility hardening
 - `uv build`
 - `uvx twine check dist/*`
 - `uv run resonance-pipeline --input data/substation_scada_33_11kv.csv --output-dir manuscript/artifacts`
-- `.\.venv\Scripts\python.exe scripts/ingest_operational_workbook.py --output data\substation_scada_33_11kv_field.csv --provenance manuscript\artifacts\research\data_provenance.yaml`
+- `.\.venv\Scripts\python.exe scripts/ingest_operational_workbook.py --output data\substation_scada_33_11kv.csv --provenance manuscript\artifacts\research\data_provenance.yaml`
 - `.\.venv\Scripts\python.exe manuscript/generate_research_artifacts.py --data-path data\substation_scada_33_11kv_field.csv`
 - `.\.venv\Scripts\python.exe -c "from pathlib import Path; import sys; sys.path.insert(0,'src'); from resonance_risk_screening.pipeline import ResonancePipeline; ResonancePipeline().run(Path('data/substation_scada_33_11kv_field.csv'), Path('manuscript/artifacts'))"`
 - `uv run python scripts/reproduce_all.py`
@@ -98,14 +98,14 @@ Scope: Final checklist after UX/OO and reproducibility hardening
 - `test_venv\Scripts\python.exe -c "import resonance_risk_screening as r; print(r.__version__)"`
 - `uv run --python test_venv\Scripts\python.exe --with ipython ipython -c "import resonance_risk_screening as mt; help(mt)"`
 
-## Field-Data Run Evidence
-- Source workbook: `data_table.xlsx`
+## Operational-Data Run Evidence
+- Source workbook: `data/data_table.xlsx`
 - Ingest path: `scripts/ingest_operational_workbook.py`
 - Provenance report: `manuscript/artifacts/research/data_provenance.yaml`
-- Field dataset used for latest artifacts: `data/substation_scada_33_11kv_field.csv`
-- Pipeline outputs updated from field data:
-  - `manuscript/artifacts/risk_predictions.csv` (2069 rows)
-  - `manuscript/artifacts/cv_metrics.csv` (mean accuracy: 0.6852; mean macro_f1: 0.6119)
+- Cleaned dataset used for latest artifacts: `data/substation_scada_33_11kv.csv`
+- Pipeline outputs updated from operational data:
+  - `manuscript/artifacts/risk_predictions.csv` (2082 rows)
+  - `manuscript/artifacts/cv_metrics.csv`
   - `manuscript/artifacts/benchmark_metrics.csv`
 
 ## Summary

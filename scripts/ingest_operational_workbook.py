@@ -139,7 +139,7 @@ def _parse_sheet(sheet_name: str, xml_bytes: bytes, shared_strings: List[str]) -
     current_date: Optional[datetime] = None
 
     # The repository contains two raw-workbook layouts:
-    # - legacy monthly-sheet operational workbook
+    # - a legacy monthly-sheet operational workbook
     # - data_table.xlsx with INCOMERS / Sheet2 tabs and a different column layout
     if sheet_name.lower() in {"incomers", "sheet2"}:
         layout = SheetLayout(
@@ -330,7 +330,7 @@ def build_qc_summary(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Ingest an operational workbook into analysis-ready CSV for the screening pipeline.")
+    parser = argparse.ArgumentParser(description="Ingest an operational workbook into an analysis-ready CSV for the screening pipeline.")
     parser.add_argument("--input", default="data/data_table.xlsx", help="Path to source workbook (.xlsx)")
     parser.add_argument("--output", default="data/substation_scada_33_11kv.csv", help="Output analysis CSV path")
     parser.add_argument(

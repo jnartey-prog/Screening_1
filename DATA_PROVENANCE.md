@@ -1,16 +1,16 @@
 # Data Provenance and Reproducibility
 
-This project now includes an explicit ingest path from the original field workbook to the analysis dataset used by the screening pipeline.
+This project now includes an explicit ingest path from the source operational workbook to the analysis dataset used by the screening pipeline.
 
 ## Source File
 
-- `data_table.xlsx` (raw field workbook)
+- `data/data_table.xlsx` (source operational workbook)
 
 ## Ingest Script
 
 - `scripts/ingest_operational_workbook.py`
 
-The script parses monthly workbook sheets, extracts hourly operational channels, constructs timestamps, and writes an analysis-ready CSV with pipeline-compatible columns:
+The script parses the workbook sheets, extracts hourly operational channels, constructs timestamps, and writes an analysis-ready CSV with pipeline-compatible columns:
 
 - `timestamp`
 - `v_bus`
@@ -30,26 +30,26 @@ Run from repository root:
 
 ```powershell
 .\.venv\Scripts\python.exe scripts\ingest_operational_workbook.py `
-  --input "data_table.xlsx" `
-  --output data\substation_scada_33_11kv_field.csv `
+  --input data\data_table.xlsx `
+  --output data\substation_scada_33_11kv.csv `
   --provenance manuscript\artifacts\research\data_provenance.yaml
 ```
 
-Generate manuscript research artifacts from field-derived data:
+Generate manuscript research artifacts from the cleaned analysis dataset:
 
 ```powershell
 .\.venv\Scripts\python.exe manuscript\generate_research_artifacts.py `
-  --data-path data\substation_scada_33_11kv_field.csv
+  --data-path data\substation_scada_33_11kv.csv
 ```
 
-Run core pipeline outputs from field-derived data:
+Run core pipeline outputs from the cleaned analysis dataset:
 
 ```powershell
 $env:PYTHONPATH='src'
-.\.venv\Scripts\python.exe -c "from pathlib import Path; from resonance_risk_screening.pipeline import ResonancePipeline; ResonancePipeline().run(Path('data/substation_scada_33_11kv_field.csv'), Path('manuscript/artifacts'))"
+.\.venv\Scripts\python.exe -c "from pathlib import Path; from resonance_risk_screening.pipeline import ResonancePipeline; ResonancePipeline().run(Path('data/substation_scada_33_11kv.csv'), Path('manuscript/artifacts'))"
 ```
 
 ## Notes
 
-- `data/` is git-ignored in this repository, so generated CSV datasets are not versioned by default.
+- The cleaned analysis CSV is the dataset used by the released manuscript artifacts.
 - The provenance YAML is the authoritative run summary for source file, parsed rows, time span, sheets used, and channel statistics.
