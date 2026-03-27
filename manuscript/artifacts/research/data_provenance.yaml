@@ -1,0 +1,49 @@
+source_file: data\data_table.xlsx
+output_file: data\substation_scada_33_11kv.csv
+rows: 2082
+start_timestamp: '2024-01-01 00:00:00'
+end_timestamp: '2024-04-01 07:00:00'
+sheets_used:
+- Sheet2
+preprocessing_notes:
+- Multi-row workbook headers flattened into analysis columns.
+- Aggregate incomer current field labelled TOTAL (KA) interpreted as amperes because
+  it equals the arithmetic sum of incomer channels.
+- Extreme channel outliers screened with MAD-based filtering before interpolation.
+channels:
+  v_bus:
+    missing_rate: 0.0
+    min: 32.4
+    max: 35.9
+    mean: 34.416618635926994
+    screened_outliers: 1
+  i_inc:
+    missing_rate: 0.0
+    min: 170.0
+    max: 3329.0
+    mean: 2186.604707012488
+    screened_outliers: 0
+  p_total:
+    missing_rate: 0.0
+    min: 9.4603572
+    max: 172.80186515999998
+    mean: 116.4650060853026
+    screened_outliers: 0
+  i_f_1:
+    missing_rate: 0.0
+    min: 33.0
+    max: 699.0
+    mean: 315.88328530259366
+    screened_outliers: 0
+  i_f_2:
+    missing_rate: 0.0
+    min: 35.0
+    max: 365.0
+    mean: 193.17267050912585
+    screened_outliers: 1
+  i_f_3:
+    missing_rate: 0.0
+    min: 47.0
+    max: 547.0
+    mean: 330.3246878001921
+    screened_outliers: 0

@@ -10,7 +10,7 @@ This repository is limited to the files needed to reproduce the released screeni
 - `scripts/ingest_operational_workbook.py`: workbook-to-analysis ingest script
 - `manuscript/generate_research_artifacts.py`: artifact generation script
 - `data/substation_scada_33_11kv.csv`: cleaned analysis dataset
-- `manuscript/artifacts/`: manuscript-facing figures, tables, and result files
+- `manuscript/artifacts/reproducibility_artifacts.zip`: zipped manuscript-facing figures, tables, and result files
 - `manuscript/artifacts/research/data_provenance.yaml`: provenance summary
 - `FINAL_RUN_MANIFEST.yaml`: frozen run manifest
 
