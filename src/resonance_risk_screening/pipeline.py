@@ -66,7 +66,7 @@ class ResonancePipeline(BasePipeline):
         results_df["risk_label"] = labels.values
         results_df = pd.concat([results_df, probs], axis=1)
 
-        cv_metrics = evaluate_temporal_cv(results_df, labels)
+        cv_metrics = evaluate_temporal_cv(results_df)
         benchmark_metrics = run_benchmarks(results_df, labels)
 
         output_dir.mkdir(parents=True, exist_ok=True)

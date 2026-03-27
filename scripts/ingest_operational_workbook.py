@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 import xml.etree.ElementTree as ET
 
+import numpy as np
 import pandas as pd
 import yaml
 
@@ -29,6 +30,19 @@ class ParsedRow:
     i_f_3: float
     source_sheet: str
     source_row: int
+
+
+@dataclass(frozen=True)
+class SheetLayout:
+    col_time: int
+    col_date_serial: int
+    col_i_inc: int
+    col_v1: int
+    col_v2: int | None
+    col_p_total: int
+    incomer_cols: list[int]
+    mw_cols: list[int]
+    feeder_cols: list[int]
 
 
 def _col_to_index(col: str) -> int:
@@ -124,16 +138,33 @@ def _parse_sheet(sheet_name: str, xml_bytes: bytes, shared_strings: List[str]) -
     parsed: List[ParsedRow] = []
     current_date: Optional[datetime] = None
 
-    # Column mapping from observed workbook layout.
-    col_time = 2   # B
-    col_date_serial = 1  # A
-    col_i_inc = 7  # G TOTAL (KA), used as aggregate incomer current signal
-    col_v1 = 8     # H BB1 (KV)
-    col_v2 = 9     # I BB2 (KV)
-    col_p_total = 15  # O TOTAL (MW)
-    incomer_cols = [3, 4, 5, 6]  # C..F incomer amps
-    mw_cols = [11, 12, 13, 14]   # K..N incomer MW
-    feeder_cols = list(range(17, 29))  # Q..AB feeder circuits
+    # The repository contains two raw-workbook layouts:
+    # - legacy monthly-sheet operational workbook
+    # - data_table.xlsx with INCOMERS / Sheet2 tabs and a different column layout
+    if sheet_name.lower() in {"incomers", "sheet2"}:
+        layout = SheetLayout(
+            col_time=2,
+            col_date_serial=1,
+            col_i_inc=6,  # labeled TOTAL (KA) in workbook but numerically behaves as amps
+            col_v1=7,
+            col_v2=None,
+            col_p_total=11,
+            incomer_cols=[3, 4, 5],
+            mw_cols=[8, 9, 10],
+            feeder_cols=list(range(12, 22)),
+        )
+    else:
+        layout = SheetLayout(
+            col_time=2,  # B
+            col_date_serial=1,  # A
+            col_i_inc=7,  # G TOTAL (KA), used as aggregate incomer current signal
+            col_v1=8,  # H BB1 (KV)
+            col_v2=9,  # I BB2 (KV)
+            col_p_total=15,  # O TOTAL (MW)
+            incomer_cols=[3, 4, 5, 6],  # C..F incomer amps
+            mw_cols=[11, 12, 13, 14],  # K..N incomer MW
+            feeder_cols=list(range(17, 29)),  # Q..AB feeder circuits
+        )
 
     for row in rows:
         row_idx = int(row.attrib["r"])
@@ -153,38 +184,38 @@ def _parse_sheet(sheet_name: str, xml_bytes: bytes, shared_strings: List[str]) -
         if date_candidate is not None:
             current_date = date_candidate
         else:
-            serial_val = _as_float(values_by_col.get(col_date_serial, ""))
+            serial_val = _as_float(values_by_col.get(layout.col_date_serial, ""))
             if serial_val is not None and serial_val > 40000:
                 current_date = _excel_serial_to_datetime(serial_val).replace(hour=0, minute=0, second=0, microsecond=0)
 
         if current_date is None:
             continue
 
-        hour_val = _as_float(values_by_col.get(col_time, ""))
+        hour_val = _as_float(values_by_col.get(layout.col_time, ""))
         if hour_val is None:
             continue
         hour_int = int(hour_val)
         if hour_int < 1 or hour_int > 24:
             continue
 
-        i_inc = _as_float(values_by_col.get(col_i_inc, ""))
+        i_inc = _as_float(values_by_col.get(layout.col_i_inc, ""))
         if i_inc is None:
-            incomers = [x for x in (_as_float(values_by_col.get(c, "")) for c in incomer_cols) if x is not None]
+            incomers = [x for x in (_as_float(values_by_col.get(c, "")) for c in layout.incomer_cols) if x is not None]
             if incomers:
                 i_inc = float(sum(incomers))
 
-        p_total = _as_float(values_by_col.get(col_p_total, ""))
+        p_total = _as_float(values_by_col.get(layout.col_p_total, ""))
         if p_total is None:
-            incomer_mw = [x for x in (_as_float(values_by_col.get(c, "")) for c in mw_cols) if x is not None]
+            incomer_mw = [x for x in (_as_float(values_by_col.get(c, "")) for c in layout.mw_cols) if x is not None]
             if incomer_mw:
                 p_total = float(sum(incomer_mw))
 
-        f1, f2, f3 = _first_n_numeric(values_by_col, feeder_cols, n=3)
+        f1, f2, f3 = _first_n_numeric(values_by_col, layout.feeder_cols, n=3)
         if i_inc is None or p_total is None or f1 is None or f2 is None or f3 is None:
             continue
 
-        v1 = _as_float(values_by_col.get(col_v1, ""))
-        v2 = _as_float(values_by_col.get(col_v2, ""))
+        v1 = _as_float(values_by_col.get(layout.col_v1, ""))
+        v2 = _as_float(values_by_col.get(layout.col_v2, "")) if layout.col_v2 is not None else None
         if v1 is None and v2 is None:
             continue
         v_bus = float(pd.Series([x for x in [v1, v2] if x is not None]).mean())
@@ -239,24 +270,60 @@ def ingest_workbook(xlsx_path: Path) -> pd.DataFrame:
     return df
 
 
-def build_qc_summary(df: pd.DataFrame, source_xlsx: Path, output_csv: Path) -> dict:
+def _mad_mask(series: pd.Series, threshold: float = 6.0) -> pd.Series:
+    median = float(series.median())
+    abs_dev = (series - median).abs()
+    mad = float(abs_dev.median())
+    if mad == 0.0:
+        return pd.Series([False] * len(series), index=series.index)
+    modified_z = 0.6745 * abs_dev / mad
+    return modified_z > threshold
+
+
+def clean_analysis_dataset(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, int]]:
+    out = df.copy().sort_values("timestamp").reset_index(drop=True)
+    numeric_cols = ["v_bus", "i_inc", "p_total", "i_f_1", "i_f_2", "i_f_3"]
+    anomaly_counts: dict[str, int] = {}
+
+    for col in numeric_cols:
+        mask = _mad_mask(out[col])
+        anomaly_counts[col] = int(mask.sum())
+        if mask.any():
+            out.loc[mask, col] = np.nan
+    out[numeric_cols] = out[numeric_cols].interpolate(method="linear", limit_direction="both")
+    return out, anomaly_counts
+
+
+def build_qc_summary(
+    analysis_df: pd.DataFrame,
+    source_xlsx: Path,
+    output_csv: Path,
+    source_sheets: list[str],
+    anomaly_counts: dict[str, int],
+) -> dict:
     channel_cols = ["v_bus", "i_inc", "p_total", "i_f_1", "i_f_2", "i_f_3"]
     qc_channels = {
         c: {
-            "missing_rate": float(df[c].isna().mean()),
-            "min": float(df[c].min()),
-            "max": float(df[c].max()),
-            "mean": float(df[c].mean()),
+            "missing_rate": float(analysis_df[c].isna().mean()),
+            "min": float(analysis_df[c].min()),
+            "max": float(analysis_df[c].max()),
+            "mean": float(analysis_df[c].mean()),
+            "screened_outliers": int(anomaly_counts.get(c, 0)),
         }
         for c in channel_cols
     }
     qc = {
         "source_file": str(source_xlsx),
         "output_file": str(output_csv),
-        "rows": int(len(df)),
-        "start_timestamp": str(df["timestamp"].min()),
-        "end_timestamp": str(df["timestamp"].max()),
-        "sheets_used": sorted(df["source_sheet"].unique().tolist()),
+        "rows": int(len(analysis_df)),
+        "start_timestamp": str(analysis_df["timestamp"].min()),
+        "end_timestamp": str(analysis_df["timestamp"].max()),
+        "sheets_used": sorted(source_sheets),
+        "preprocessing_notes": [
+            "Multi-row workbook headers flattened into analysis columns.",
+            "Aggregate incomer current field labelled TOTAL (KA) interpreted as amperes because it equals the arithmetic sum of incomer channels.",
+            "Extreme channel outliers screened with MAD-based filtering before interpolation.",
+        ],
         "channels": qc_channels,
     }
     return qc
@@ -280,11 +347,18 @@ def main() -> None:
     prov_path.parent.mkdir(parents=True, exist_ok=True)
 
     df = ingest_workbook(input_path)
+    cleaned_df, anomaly_counts = clean_analysis_dataset(df)
 
-    analysis_df = df[["timestamp", "v_bus", "i_inc", "p_total", "i_f_1", "i_f_2", "i_f_3"]].copy()
+    analysis_df = cleaned_df[["timestamp", "v_bus", "i_inc", "p_total", "i_f_1", "i_f_2", "i_f_3"]].copy()
     analysis_df.to_csv(output_path, index=False)
 
-    qc = build_qc_summary(df, source_xlsx=input_path, output_csv=output_path)
+    qc = build_qc_summary(
+        analysis_df,
+        source_xlsx=input_path,
+        output_csv=output_path,
+        source_sheets=cleaned_df["source_sheet"].unique().tolist(),
+        anomaly_counts=anomaly_counts,
+    )
     prov_path.write_text(yaml.safe_dump(qc, sort_keys=False), encoding="utf-8")
 
     print(f"Ingested {len(analysis_df)} rows from {input_path} -> {output_path}")

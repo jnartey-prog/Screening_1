@@ -288,20 +288,20 @@ Operational data reconstruction → physics-guided proxy construction → operat
 2. Substation Operational Data Reconstruction
 2.1 Data Sources
 
-The analysis utilizes routine SCADA measurements from a 33/11 kV distribution substation. Typical operational variables include:
+The analysis utilizes a field workbook titled `data_table.xlsx`, from which a deterministic ingest script reconstructs an analysis-ready hourly dataset for a named 33/11 kV site identified in the workbook as the restricted operational site. The retained monitoring window used in the present study is exactly 2024-01-01 00:00:00 to 2024-04-01 07:00:00, yielding 2069 valid hourly observations after timestamp harmonization, channel completeness checks, and duplicate removal. The retained rows are drawn from the JAN, FEB, MAR, and APR workbook sheets.
 
-• busbar voltage magnitude
-• incomer current
-• transformer loading
-• feeder currents
-• feeder real power flows
+The source workbook exposes the following operational channels and engineering units:
 
-These measurements are typically recorded at:
+• incomer currents in amperes for up to four incomers
+• aggregate incomer current in kA (`TOTAL (KA)`)
+• busbar voltages in kV (`BB1`, `BB2`)
+• incomer real-power channels in MW for up to four incomers
+• aggregate real power in MW (`TOTAL (MW)`)
+• feeder-current channels for named 33 kV feeders including Awoshie, Kwashieman, Santa Maria, Weija, Sakaman, and Gbawe
 
-• hourly resolution, or
-• 15-minute resolution.
+For the reduced-order screening pipeline, the analysis dataset retains the channels `timestamp`, `v_bus`, `i_inc`, `p_total`, `i_f_1`, `i_f_2`, and `i_f_3`. Here, `v_bus` is the mean of the available BB1/BB2 voltage readings, `i_inc` is the aggregate incomer current from column `G` with fallback to the sum of incomer currents in columns `C:F`, `p_total` is the total MW from column `O` with fallback to the sum of incomer MW channels in columns `K:N`, and `i_f_1:i_f_3` are the first three available feeder-current channels in columns `Q:AB`.
 
-The observation horizon spans approximately 6–12 months to capture seasonal, weekly, and daily variations in substation operating conditions.
+The study is therefore computationally reproducible from the raw workbook through the ingest and screening scripts. However, utility metadata not present in the workbook itself, including SCADA vendor, instrument calibration records, capacitor-bank switching logs, transformer nameplate ratings, detailed feeder impedances, and a formal utility data-sharing identifier, are not asserted here and should be treated as external deployment context rather than part of the released computational pipeline.
 
 2.2 Data Pre-Processing
 

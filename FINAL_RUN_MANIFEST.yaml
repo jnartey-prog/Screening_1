@@ -1,0 +1,47 @@
+run_id: "datatable-manuscript-run-2026-03-27"
+date_utc: "2026-03-27"
+status: "frozen"
+
+inputs:
+  raw_workbook: "data/data_table.xlsx"
+  analysis_csv: "data/substation_scada_33_11kv.csv"
+
+scripts:
+  ingest: "scripts/ingest_operational_workbook.py"
+  artifact_generation: "manuscript/generate_research_artifacts.py"
+
+commands:
+  - ".\\.venv\\Scripts\\python.exe scripts\\ingest_operational_workbook.py --input data\\data_table.xlsx --output data\\substation_scada_33_11kv.csv --provenance manuscript\\artifacts\\research\\data_provenance.yaml"
+  - ".\\.venv\\Scripts\\python.exe manuscript\\generate_research_artifacts.py --data-path data\\substation_scada_33_11kv.csv"
+  - ".\\.venv\\Scripts\\python.exe -c \"from pathlib import Path; import sys; sys.path.insert(0,'src'); from resonance_risk_screening.pipeline import ResonancePipeline; ResonancePipeline().run(Path('data/substation_scada_33_11kv.csv'), Path('manuscript/artifacts'))\""
+
+primary_outputs:
+  research_dir: "manuscript/artifacts/research"
+  manuscript_dir: "manuscript/artifacts"
+  provenance: "manuscript/artifacts/research/data_provenance.yaml"
+  artifact_manifest: "manuscript/artifacts/research/research_artifact_manifest.yaml"
+  hashes_file: "manuscript/artifacts/research/ARTIFACT_HASHES.sha256"
+
+metrics_snapshot:
+  risk_predictions_rows: 2082
+  cv_mean_q1: 0.9011725424276182
+  cv_mean_q2: 1.2070106788979964
+  cv_mean_high_share: 0.2980769230769231
+  benchmark_concordance:
+    voltage_only_spearman: 0.6058662178974216
+    loading_only_spearman: 0.4213261162173094
+    stress_average_spearman: 0.6736211619732608
+
+artifact_set:
+  figures: 7
+  tables: 7
+  formats:
+    - png
+    - pdf
+    - svg
+    - csv
+    - tex
+
+reviewer_traceability:
+  data_appendix: "METHODS_DATA_APPENDIX.md"
+  reviewer_checklist: "REVIEWER_CHECKLIST.md"

@@ -40,6 +40,13 @@ def _save_line_plot(series: pd.Series, out_path: Path, title: str) -> None:
     plt.close(fig)
 
 
+def _first_numeric_column(df: pd.DataFrame) -> pd.Series | None:
+    numeric = df.select_dtypes(include="number")
+    if numeric.empty:
+        return None
+    return numeric.iloc[:, 0]
+
+
 def generate_manuscript_artifacts(
     results: dict[str, pd.DataFrame], output_dir: Path
 ) -> dict[str, Path]:
@@ -91,9 +98,15 @@ def generate_manuscript_artifacts(
     )
     _save_line_plot(base_df["risk_score"], output_dir / FIGURE_TITLES[5], "Model output signal")
     if not benchmark_df.empty:
-        _save_line_plot(
-            benchmark_df["accuracy"], output_dir / FIGURE_TITLES[6], "Benchmark vs uncertainty"
-        )
+        benchmark_series = _first_numeric_column(benchmark_df)
+        if benchmark_series is not None:
+            _save_line_plot(
+                benchmark_series, output_dir / FIGURE_TITLES[6], "Benchmark concordance summary"
+            )
+        else:
+            _save_line_plot(
+                base_df["risk_score"], output_dir / FIGURE_TITLES[6], "Benchmark placeholder"
+            )
     else:
         _save_line_plot(
             base_df["risk_score"], output_dir / FIGURE_TITLES[6], "Benchmark placeholder"
