@@ -16,10 +16,3 @@ build/
 docs/_build/
 manuscript/artifacts/
 data/
-!data/
-!data/substation_scada_33_11kv.csv
-!manuscript/
-!manuscript/artifacts/
-!manuscript/artifacts/reproducibility_artifacts.zip
-!manuscript/artifacts/research/
-!manuscript/artifacts/research/data_provenance.yaml
